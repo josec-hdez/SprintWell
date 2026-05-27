@@ -141,3 +141,33 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# ─── Python (optimizer service) ───
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# ─── Jupyter notebooks (benchmarks) ───
+.ipynb_checkpoints/
+
+# ─── Prisma generated client (backend) ───
+backend/src/infrastructure/persistence/prisma/generated/
+
+# ─── Benchmark run artifacts ───
+benchmarks/results/*
+!benchmarks/results/README.md
+
+# ─── Docker ───
+docker-compose.override.yml
+
+# ─── OS ───
+.DS_Store
+
+# ─── IDE / editors ───
+.idea/
+.vscode/
