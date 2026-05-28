@@ -1,0 +1,27 @@
+# SprintWell — development infrastructure
+# Single-service compose for local dev. Production deployment is out of scope here.
+# Requires Docker Engine 20.10+ with Compose v2 plugin (`docker compose`, not `docker-compose`).
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: sprintwell-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sprintwell}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sprintwell}
+      POSTGRES_DB: ${POSTGRES_DB:-sprintwell}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - sprintwell_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  sprintwell_postgres_data:
+    name: sprintwell_postgres_data
