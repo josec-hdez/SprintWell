@@ -47,3 +47,34 @@ Sprint 0 — Preparación. El backlog vive como _issues_ de GitHub derivados del
 ## Licencia
 
 Ver [LICENSE](LICENSE).
+
+---
+
+## Getting started
+
+> This section is in English per brief §3 (code and technical docs in English; the final memoria is in Spanish).
+
+SprintWell is a monorepo with three services plus shared and documentation areas. The skeleton mirrors brief §14; per-service tooling is bootstrapped in later week-1 issues.
+
+### Repository layout
+
+| Directory | Holds | Stack |
+|---|---|---|
+| `backend/` | NestJS REST API, structured as DDD in 4 layers (`domain`, `application`, `infrastructure`, `presentation`). Layer dependency rules in brief §14.1. | NestJS + TypeScript + Prisma |
+| `frontend/` | Single-page web app: public read-only views plus member/admin flows. | React + TypeScript + Vite + Tailwind + shadcn/ui |
+| `optimizer/` | Standalone solver microservice (CP-SAT + baselines) and the synthetic dataset CLI generator. | Python 3.11 + OR-Tools + FastAPI |
+| `shared/` | Cross-service source of truth — `rule-schemas/` JSON Schema consumed by both backend and optimizer. | JSON Schema |
+| `docs/` | Technical brief (SSOT), action plan, wireframes, thesis (LaTeX), methodology log, and ADRs. | Markdown / LaTeX |
+| `benchmarks/` | Reproducible benchmark: instances, results, and analysis notebooks. | JSON / Jupyter |
+
+Each directory carries a short `README.md` describing its purpose and the rules that apply to it.
+
+### Prerequisites (planned)
+
+- Node.js (LTS) and a package manager — for `backend/` and `frontend/`.
+- Python 3.11 — for `optimizer/`.
+- Docker + Docker Compose — for PostgreSQL 16 and orchestrating the services.
+
+### Status
+
+This issue bootstraps the monorepo skeleton, the editor configuration (`.editorconfig`), and the ignore rules (`.gitignore`). Per-service manifests (`package.json`, `pyproject.toml`, `tsconfig.json`, Prisma schema, `docker-compose.yml`) and runnable code are added in subsequent week-1 issues.
