@@ -65,3 +65,7 @@ jobs:
       - name: Test
         if: steps.detect.outputs.has-tooling == 'true'
         run: npm test --if-present -- --passWithNoTests
+
+      - name: Test (e2e)
+        if: steps.detect.outputs.has-tooling == 'true'
+        run: npm run test:e2e --if-present -- --passWithNoTests
