@@ -1,0 +1,39 @@
+// SprintWell — base Prisma schema.
+//
+// Location pinned by brief §14 (backend layout): the Prisma schema and its
+// migrations live INSIDE the infrastructure layer, at
+//   backend/src/infrastructure/persistence/prisma/
+// so that "Prisma is an infrastructure concern" is physically true and not
+// just conceptual. The custom path is resolved automatically because
+// package.json has `"prisma": { "schema": "src/infrastructure/persistence/prisma/schema.prisma" }`.
+//
+// Datasource follows brief §4.2: PostgreSQL 16 (provider = "postgresql"),
+// jsonb columns will be added in week 4 when the real domain models land.
+//
+// Week-1 bootstrap (issue #12): only a SystemHealth placeholder so the migration
+// pipeline (datasource, client generation, migrate dev) is validated end-to-end
+// BEFORE the real schema (User / Skill / Sprint / Task / Rule / PlanningRun /
+// Assignment) arrives in week 4. This model is scheduled for deletion at that
+// point — no code in this repo imports it.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Placeholder model — proves the CREATE TABLE flow end-to-end during week 1.
+/// Mirrors the SystemHealth value object from issue #11 (domain/shared/system-health.ts)
+/// only by shape — there is no runtime wiring. The FakeSystemHealthRepository
+/// continues to serve GET /health. This table will be dropped in week 4 by the
+/// migration that introduces the real domain entities.
+model SystemHealth {
+  id        String   @id @default(uuid())
+  status    String
+  checkedAt DateTime @default(now()) @map("checked_at")
+
+  @@map("system_health")
+}
