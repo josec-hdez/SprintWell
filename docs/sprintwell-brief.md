@@ -203,7 +203,7 @@ Las reglas `is_hard = true` no consumen presupuesto: son restricciones absolutas
 
 ### 6.3 Catálogo de tipos de regla
 
-Diez tipos cubriendo cinco "formas" semánticas. Se congelan en la versión 1 del esquema.
+Doce tipos cubriendo cinco "formas" semánticas. Se congelan en la versión 1 del esquema.
 
 #### Forma A — Atributo de tarea
 
@@ -239,8 +239,8 @@ Diez tipos cubriendo cinco "formas" semánticas. Se congelan en la versión 1 de
 
 **`MAX_TASKS_PER_SPRINT`**
 
-- `params`: `{ max: int }`
-- Semántica: si es dura, ninguna planificación válida le asigna más de `max` tareas en el sprint. Si es blanda, cada exceso penaliza proporcionalmente al peso.
+- `params`: `{ max_tasks: int }` (renombrado desde `max` para evitar shadowing del builtin `max` de Python en el modelo Pydantic; el nombre `max_tasks` también gana en claridad sobre el wire).
+- Semántica: si es dura, ninguna planificación válida le asigna más de `max_tasks` tareas en el sprint. Si es blanda, cada exceso penaliza proporcionalmente al peso.
 
 **`FOCUS_PREFERENCE`**
 
@@ -349,7 +349,7 @@ Output esperado:
 - `status`: `OPTIMAL` | `FEASIBLE` | `INFEASIBLE` | `TIMEOUT`
 - `assignments`: `[{task_id, user_id, start_day}]`
 - `objective_value`: float
-- `per_user_happiness`: `{user_id: f_j}`
+- `per_user_happiness`: `[{user_id: string, f_j: float}]` — lista de registros tipados (no un mapa) para permitir validación por elemento (`f_j ∈ [0,1]`) y un esquema OpenAPI/Zod limpio. Semánticamente equivalente a un mapa por `user_id`.
 - `rule_evaluations`: `[{rule_id, satisfied: bool|float, contribution: float}]` — base de la explicabilidad.
 - `solver_stats`: tiempo, número de branches, conflictos.
 
