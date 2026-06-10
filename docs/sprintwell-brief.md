@@ -352,6 +352,7 @@ Output esperado:
 - `per_user_happiness`: `[{user_id: string, f_j: float}]` — lista de registros tipados (no un mapa) para permitir validación por elemento (`f_j ∈ [0,1]`) y un esquema OpenAPI/Zod limpio. Semánticamente equivalente a un mapa por `user_id`.
 - `rule_evaluations`: `[{rule_id, satisfied: bool|float, contribution: float}]` — base de la explicabilidad.
 - `solver_stats`: tiempo, número de branches, conflictos.
+- `message`: `string | null` — explicación legible (en español, para la UI) cuando el status no es `OPTIMAL`. `null` cuando la corrida produjo una solución óptima. Se popula automáticamente en `INFEASIBLE` y `TIMEOUT` con copia hardcoded; se deja para una historia posterior el diagnóstico por suposiciones (assumption-based) que permita explicar qué restricción se violó.
 
 ### 8.2 Baseline 1: Random
 
