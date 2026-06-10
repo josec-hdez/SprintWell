@@ -497,6 +497,8 @@ class SolverOutput(_Strict):
     per_user_happiness: list[UserHappiness] = Field(default_factory=list)
     rule_evaluations: list[RuleEvaluation] = Field(default_factory=list)
     solver_stats: SolverStats
+    # Brief §8.1: human-readable explanation for non-OPTIMAL terminal states.
+    message: str | None = None
 
     @model_validator(mode="after")
     def _check_status_invariants(self) -> SolverOutput:
