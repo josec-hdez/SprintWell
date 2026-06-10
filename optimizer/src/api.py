@@ -1,10 +1,15 @@
 """FastAPI entry point for the SprintWell optimizer microservice."""
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import JSONResponse
 
 # Eager import: if the OR-Tools native library cannot load, fail at startup
 # instead of at the first solver request.
 from ortools.sat.python import cp_model  # noqa: F401
+from pydantic import ValidationError
+
+from models import ProblemInput, SolverOutput
+from solvers.runner import solve_problem
 
 app = FastAPI(
     title="SprintWell Optimizer",
@@ -17,3 +22,33 @@ app = FastAPI(
 def health() -> dict[str, str]:
     """Liveness probe used by the backend and orchestration."""
     return {"status": "ok"}
+
+
+@app.post(
+    "/solve",
+    response_model=SolverOutput,
+    summary="Solve a sprint planning problem",
+    description=(
+        "Receives a `ProblemInput` and returns a `SolverOutput` per brief §8.1. "
+        "Frontier of the optimizer microservice; called synchronously by the backend (§4.3). "
+        "Timeout is configured via `ProblemInput.time_budget_s` (default 30 s)."
+    ),
+)
+async def post_solve(request: Request) -> SolverOutput | JSONResponse:
+    # The contract models use ``strict=True`` (see models._Strict), which
+    # rejects the standard JSON coercions (date strings → date, enum strings
+    # → StrEnum) on the Python-validation path FastAPI uses by default.
+    # Parse the raw body and validate via the JSON path so the strict
+    # invariants stay intact while the wire format is honored.
+    raw_body = await request.body()
+    try:
+        problem = ProblemInput.model_validate_json(raw_body)
+    except ValidationError as exc:
+        # Mirror FastAPI's default 422 envelope shape: ``{"detail": [...]}``.
+        return JSONResponse(status_code=422, content={"detail": exc.errors(include_url=False)})
+
+    try:
+        return solve_problem(problem)
+    except RuntimeError as exc:
+        # MODEL_INVALID from CP-SAT — builder bug, surface as 500.
+        raise HTTPException(status_code=500, detail=f"Solver builder error: {exc}") from exc
