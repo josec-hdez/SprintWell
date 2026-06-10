@@ -1,12 +1,13 @@
-"""CP-SAT base model builder for SprintWell (issue #18).
+"""CP-SAT base model builder for SprintWell (issue #18, extended in #21).
 
-Builds variables and hard constraints R1-R5 (brief §7.2 / thesis §3.3) from
-a validated ``ProblemInput``. Skill matching (R6) and DSL hard rules (R7)
-land in later issues and are intentionally out of scope here.
+Builds variables and hard constraints R1-R6 (brief §7.2 / thesis §3.3) from
+a validated ``ProblemInput``. R6 (skill-minimum filter, issue #21) is handled
+here as a pre-assignment eligibility filter. DSL hard rules (R7) land in
+later issues and are intentionally out of scope here.
 
 References:
-- brief §7.2 — R1-R5 mathematical form.
-- thesis §3.3 — equations (3.1)-(3.5).
+- brief §7.2 — R1-R6 mathematical form.
+- thesis §3.3 — equations (3.1)-(3.6).
 """
 
 from __future__ import annotations
@@ -48,8 +49,13 @@ class BaseModelVars:
     """The validated input that produced these variables."""
 
 
-def build_base_model(problem: ProblemInput) -> tuple[Any, BaseModelVars]:
-    """Build the CP-SAT base model with R1-R5 hard constraints (brief §7.2).
+def build_base_model(
+    problem: ProblemInput,
+    *,
+    skill_threshold: int = 1,
+    learning_skills_per_user: dict[str, frozenset[str]] | None = None,
+) -> tuple[Any, BaseModelVars]:
+    """Build the CP-SAT base model with R1-R6 hard constraints (brief §7.2).
 
     Variables:
     - ``start[i]`` IntVar in ``[0, D - effort_days(i)]`` — domain enforces R3.
@@ -63,6 +69,22 @@ def build_base_model(problem: ProblemInput) -> tuple[Any, BaseModelVars]:
     The shared ``start[i]`` / ``end[i]`` IntVars are correct because R1
     forces exactly one ``assigned[i, j]`` to be true per task, so exactly
     one of the m optional intervals for task ``i`` is present.
+
+    Args:
+        problem: validated ``ProblemInput`` payload.
+        skill_threshold: τ from brief §7.2 / thesis §3.1 — the minimum
+            skill level required for a user to be considered eligible for a
+            task that requires that skill. Default ``1`` collapses R6 to
+            "user has the skill at all". The wire contract
+            (``ProblemInput``) does not yet expose this knob — that is a
+            deliberate follow-up.
+        learning_skills_per_user: Λ_j hook from thesis §3.3 — maps
+            ``user.id`` to the frozenset of skill ids the user is actively
+            LEARN_SKILL-ing for this sprint, relaxing R6 for those
+            (user, skill) pairs. ``None`` (the default) ≡ empty mapping ≡
+            no relaxation. The rule_compiler will populate this map once
+            LEARN_SKILL compilation lands; until then the default is
+            correct.
     """
     model = cp_model.CpModel()
     horizon = problem.sprint.duration_days
@@ -91,6 +113,13 @@ def build_base_model(problem: ProblemInput) -> tuple[Any, BaseModelVars]:
     _add_r3_horizon(model, problem, end)
     _add_r4_deadlines(model, problem, end)
     _add_r5_dependencies(model, problem, start, end)
+    _add_r6_skill_filter(
+        model,
+        problem,
+        assigned,
+        threshold=skill_threshold,
+        learning_skills_per_user=learning_skills_per_user or {},
+    )
 
     return model, BaseModelVars(
         assigned=assigned,
@@ -196,3 +225,63 @@ def _add_r5_dependencies(
     for task in problem.tasks:
         for predecessor_id in task.depends_on:
             model.add(end[predecessor_id] <= start[task.id])
+
+
+def _add_r6_skill_filter(
+    model: Any,
+    problem: ProblemInput,
+    assigned: dict[tuple[str, str], Any],
+    *,
+    threshold: int,
+    learning_skills_per_user: dict[str, frozenset[str]],
+) -> None:
+    """R6 (brief §7.2 / thesis eq (3.6)): user must satisfy every required skill.
+
+    Formally, for every task ``i`` and user ``j``:
+
+        x_{i,j} = 1  ⟹  ∀ s ∈ ρ_i : σ_{j,s} ≥ τ ∨ s ∈ Λ_j
+
+    where ρ_i is ``task.required_skills``, σ_{j,s} is user ``j``'s level for
+    skill ``s`` (0 if absent), τ is ``threshold``, and Λ_j is the set of
+    skills user ``j`` is actively LEARN_SKILL-ing.
+
+    Unlike R1-R5 (which constrain existing decision variables), this helper
+    PRE-FILTERS the search space: for every ``(task, user)`` pair where the
+    user is statically ineligible, it asserts ``assigned[i, j] == 0``. The
+    eligibility predicate depends only on input parameters (σ, τ, Λ), never
+    on a decision variable, so a channeling encoding (``OnlyEnforceIf``)
+    would give the solver no leverage. The pre-filter is semantically
+    equivalent and strictly cheaper — CP-SAT's presolve prunes the
+    impossible branches outright.
+
+    Args:
+        threshold: τ from brief §7.2 / thesis §3.1, the minimum skill level
+            that counts as eligible. Default ``1`` (set by
+            :func:`build_base_model`) collapses R6 to "user has the skill
+            at all".
+        learning_skills_per_user: Λ_j hook from thesis §3.3. Maps
+            ``user.id`` to the frozenset of skill ids the user is actively
+            LEARN_SKILL-ing for this sprint, relaxing R6 for those
+            (user, skill) pairs. Empty mapping ≡ no relaxation. The
+            rule_compiler will populate this once LEARN_SKILL compilation
+            lands.
+
+    Empty ``task.required_skills`` is a no-op: eligibility is vacuously
+    true, so no constraint is added for any user.
+    """
+    for task in problem.tasks:
+        required = task.required_skills
+        if not required:
+            continue
+        for user in problem.users:
+            user_levels = {us.skill_id: us.level for us in user.skills}
+            learning = learning_skills_per_user.get(user.id, frozenset())
+            eligible = True
+            for skill_id in required:
+                if skill_id in learning:
+                    continue
+                if user_levels.get(skill_id, 0) < threshold:
+                    eligible = False
+                    break
+            if not eligible:
+                model.add(assigned[task.id, user.id] == 0)
