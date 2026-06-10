@@ -1,9 +1,10 @@
-"""Acceptance tests for the CP-SAT base model builder (issue #18).
+"""Acceptance tests for the CP-SAT base model builder and trivial objective.
 
-Three toy instances exercise R1-R5 (brief §7.2 / thesis §3.3) end to end:
-- toy_1_simple: feasibility + assignment uniqueness (R1).
-- toy_2_dependencies: precedence (R5) honored on the solved schedule.
-- toy_3_deadlines: deadlines (R4) honored on the solved schedule.
+Covers issues #18 (R1-R5 base model) and #19 (makespan-minimization
+objective). The three toy instances now solve to OPTIMAL because
+``attach_trivial_objective`` turns the pure feasibility problem into an
+optimization one. ``toy_1`` additionally pins the optimal makespan value
+to ensure the objective is actually wired to the right variables.
 """
 
 from __future__ import annotations
@@ -13,7 +14,7 @@ from datetime import date
 from ortools.sat.python import cp_model
 
 from models import ProblemInput, Sprint, Task, TaskCategory, User
-from solvers import BaseModelVars, build_base_model
+from solvers import BaseModelVars, attach_trivial_objective, build_base_model
 
 
 def _make_problem(
@@ -75,10 +76,11 @@ def test_toy_1_simple_feasible() -> None:
         tasks=[_task("t_1"), _task("t_2"), _task("t_3")],
     )
     model, vars_ = build_base_model(problem)
+    attach_trivial_objective(model, vars_)
     solver = cp_model.CpSolver()
     status = solver.Solve(model)
 
-    assert status in (cp_model.OPTIMAL, cp_model.FEASIBLE)
+    assert status == cp_model.OPTIMAL
     # R1: each task assigned to exactly one user.
     for task in problem.tasks:
         n_assigned = sum(solver.Value(vars_.assigned[task.id, user.id]) for user in problem.users)
@@ -95,10 +97,11 @@ def test_toy_2_dependencies_respected() -> None:
         ],
     )
     model, vars_ = build_base_model(problem)
+    attach_trivial_objective(model, vars_)
     solver = cp_model.CpSolver()
     status = solver.Solve(model)
 
-    assert status in (cp_model.OPTIMAL, cp_model.FEASIBLE)
+    assert status == cp_model.OPTIMAL
     # R5: predecessor.end <= successor.start across the dependency chain.
     assert solver.Value(vars_.end["t_1"]) <= solver.Value(vars_.start["t_2"])
     assert solver.Value(vars_.end["t_2"]) <= solver.Value(vars_.start["t_3"])
@@ -113,10 +116,28 @@ def test_toy_3_deadlines_respected() -> None:
         ],
     )
     model, vars_ = build_base_model(problem)
+    attach_trivial_objective(model, vars_)
     solver = cp_model.CpSolver()
     status = solver.Solve(model)
 
-    assert status in (cp_model.OPTIMAL, cp_model.FEASIBLE)
+    assert status == cp_model.OPTIMAL
     # R4: end[i] <= deadline_day(i) + 1.
     assert solver.Value(vars_.end["t_a"]) <= 2
     assert solver.Value(vars_.end["t_b"]) <= 4
+
+
+def test_attach_trivial_objective_minimizes_makespan() -> None:
+    # 3 unit tasks on 2 users, no deps, no deadlines:
+    #   ⌈3 / 2⌉ = 2 days is the theoretical optimal makespan.
+    problem = _make_problem(
+        users=["u_a", "u_b"],
+        tasks=[_task("t_1"), _task("t_2"), _task("t_3")],
+    )
+    model, vars_ = build_base_model(problem)
+    attach_trivial_objective(model, vars_)
+    solver = cp_model.CpSolver()
+    status = solver.Solve(model)
+
+    assert status == cp_model.OPTIMAL
+    actual_makespan = max(solver.Value(end_var) for end_var in vars_.end.values())
+    assert actual_makespan == 2
