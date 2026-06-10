@@ -18,7 +18,7 @@ from ortools.sat.python import cp_model
 
 from models import ProblemInput
 
-__all__ = ["BaseModelVars", "build_base_model"]
+__all__ = ["BaseModelVars", "attach_trivial_objective", "build_base_model"]
 
 
 @dataclass(frozen=True)
@@ -99,6 +99,34 @@ def build_base_model(problem: ProblemInput) -> tuple[Any, BaseModelVars]:
         interval=interval,
         problem=problem,
     )
+
+
+def attach_trivial_objective(model: Any, vars: BaseModelVars) -> None:
+    """Attach the trivial makespan-minimization objective (issue #19).
+
+    The base model from :func:`build_base_model` is a pure feasibility
+    problem (R1-R5 hard constraints only, no objective). This function
+    layers a minimal objective on top so CP-SAT returns an *optimal*
+    schedule rather than any feasible one:
+
+        minimize  makespan = max_i end[i]
+
+    Why makespan and not a null objective:
+
+    - Makespan is a real, defensible scheduling metric — it measures the
+      day the last task finishes, i.e. sprint completion time.
+    - It gives a clean swap-out point: later issues replace this with
+      equity-oriented objectives (workload balance, skill match, etc.)
+      without touching :func:`build_base_model`.
+
+    Open/closed by design: :func:`build_base_model` stays factibility-only,
+    and each future objective is a sibling function like this one. Callers
+    that want pure feasibility simply skip the call.
+    """
+    horizon = vars.problem.sprint.duration_days
+    makespan = model.new_int_var(0, horizon, "makespan")
+    model.add_max_equality(makespan, list(vars.end.values()))
+    model.minimize(makespan)
 
 
 def _add_r1_uniqueness(
