@@ -168,3 +168,10 @@ def compile_all(
         if term is not None:
             terms.append(term)
     return terms
+
+
+# Importing the per-type compiler modules registers their RuleCompiler
+# functions in REGISTRY via the ``@register`` decorator (import side effect).
+# Kept at the very bottom so every name they import from this package
+# (``register``, ``ObjectiveTerm``, ...) is already defined above.
+from . import prefer_avoid_skill as _prefer_avoid_skill  # noqa: E402, F401
