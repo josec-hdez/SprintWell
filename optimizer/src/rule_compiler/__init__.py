@@ -176,3 +176,4 @@ def compile_all(
 # (``register``, ``ObjectiveTerm``, ...) is already defined above.
 from . import prefer_avoid_category as _prefer_avoid_category  # noqa: E402, F401
 from . import prefer_avoid_skill as _prefer_avoid_skill  # noqa: E402, F401
+from . import prefer_domain as _prefer_domain  # noqa: E402, F401

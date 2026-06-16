@@ -69,8 +69,16 @@ def model_and_vars() -> tuple[Any, BaseModelVars]:
 
 @pytest.fixture
 def clean_registry() -> Iterator[None]:
-    """Snapshot and restore the global REGISTRY around tests that mutate it."""
+    """Run a test against an EMPTY global REGISTRY, then restore it.
+
+    The compiler submodules register real rule types on import (PREFER_SKILL,
+    PREFER_DOMAIN, ...), so tests that exercise the ``register`` decorator must
+    start from a clean slate — otherwise the type they pick collides with a
+    real compiler. Snapshot, clear, yield, restore keeps them independent of
+    whichever compilers happen to be registered.
+    """
     snapshot = dict(REGISTRY)
+    REGISTRY.clear()
     try:
         yield
     finally:
