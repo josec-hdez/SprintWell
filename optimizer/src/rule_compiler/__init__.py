@@ -175,6 +175,7 @@ def compile_all(
 # Kept at the very bottom so every name they import from this package
 # (``register``, ``ObjectiveTerm``, ...) is already defined above.
 from . import blackout_date as _blackout_date  # noqa: E402, F401
+from . import focus_preference as _focus_preference  # noqa: E402, F401
 from . import max_tasks_per_sprint as _max_tasks_per_sprint  # noqa: E402, F401
 from . import prefer_avoid_category as _prefer_avoid_category  # noqa: E402, F401
 from . import prefer_avoid_skill as _prefer_avoid_skill  # noqa: E402, F401
