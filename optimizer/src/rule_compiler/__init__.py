@@ -174,6 +174,7 @@ def compile_all(
 # functions in REGISTRY via the ``@register`` decorator (import side effect).
 # Kept at the very bottom so every name they import from this package
 # (``register``, ``ObjectiveTerm``, ...) is already defined above.
+from . import blackout_date as _blackout_date  # noqa: E402, F401
 from . import prefer_avoid_category as _prefer_avoid_category  # noqa: E402, F401
 from . import prefer_avoid_skill as _prefer_avoid_skill  # noqa: E402, F401
 from . import prefer_avoid_weekday as _prefer_avoid_weekday  # noqa: E402, F401
