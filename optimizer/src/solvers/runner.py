@@ -15,6 +15,7 @@ from typing import Any
 
 from ortools.sat.python import cp_model
 
+from explainability import evaluate_rules
 from models import (
     Assignment,
     ProblemInput,
@@ -117,14 +118,16 @@ def solve(model: Any, vars: BaseModelVars, *, time_budget_s: float) -> SolverOut
     # Status is OPTIMAL or FEASIBLE — we have a solution.
     assignments = _extract_assignments(solver, vars)
     objective_value = float(solver.objective_value)
+    # Per-rule explainability and per-user happiness from the chosen schedule.
+    rule_evaluations, per_user_happiness = evaluate_rules(vars.problem, assignments)
 
     if status == cp_model.OPTIMAL:
         return SolverOutput(
             status=RunStatus.OPTIMAL,
             assignments=assignments,
             objective_value=objective_value,
-            per_user_happiness=[],
-            rule_evaluations=[],
+            per_user_happiness=per_user_happiness,
+            rule_evaluations=rule_evaluations,
             solver_stats=make_stats("OPTIMAL"),
             message=None,
         )
@@ -136,8 +139,8 @@ def solve(model: Any, vars: BaseModelVars, *, time_budget_s: float) -> SolverOut
             status=RunStatus.TIMEOUT,
             assignments=assignments,
             objective_value=objective_value,
-            per_user_happiness=[],
-            rule_evaluations=[],
+            per_user_happiness=per_user_happiness,
+            rule_evaluations=rule_evaluations,
             solver_stats=make_stats("FEASIBLE"),
             message=_timeout_message_with_solution(wall_seconds),
         )
@@ -146,8 +149,8 @@ def solve(model: Any, vars: BaseModelVars, *, time_budget_s: float) -> SolverOut
         status=RunStatus.FEASIBLE,
         assignments=assignments,
         objective_value=objective_value,
-        per_user_happiness=[],
-        rule_evaluations=[],
+        per_user_happiness=per_user_happiness,
+        rule_evaluations=rule_evaluations,
         solver_stats=make_stats("FEASIBLE"),
         message=None,
     )
