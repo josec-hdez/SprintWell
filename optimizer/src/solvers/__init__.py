@@ -6,11 +6,17 @@ attacher (issue #19), and the solve runner that maps OR-Tools statuses to
 issues.
 """
 
-from .cpsat import BaseModelVars, attach_trivial_objective, build_base_model
+from .cpsat import (
+    BaseModelVars,
+    attach_equity_objective,
+    attach_trivial_objective,
+    build_base_model,
+)
 from .runner import solve, solve_problem
 
 __all__ = [
     "BaseModelVars",
+    "attach_equity_objective",
     "attach_trivial_objective",
     "build_base_model",
     "solve",

@@ -43,6 +43,7 @@ __all__ = [
     "RuleCompiler",
     "UnregisteredRuleTypeError",
     "compile_all",
+    "compile_by_owner",
     "compile_rule",
     "register",
 ]
@@ -168,6 +169,29 @@ def compile_all(
         if term is not None:
             terms.append(term)
     return terms
+
+
+def compile_by_owner(
+    rules: Iterable[Rule],
+    model: Any,
+    vars: BaseModelVars,
+    *,
+    registry: dict[RuleType, RuleCompiler] | None = None,
+) -> dict[str, list[ObjectiveTerm]]:
+    """Compile every rule and group the non-null soft terms by ``owner_id``.
+
+    The equity assembler (``solvers.cpsat.attach_equity_objective``) needs each
+    user's terms grouped to build per-user happiness; ``compile_all`` flattens
+    that attribution away, so this variant keeps it. Owners with no contributing
+    rule are absent from the result. Hard-only compilers still run for their
+    side effects on ``model`` but add no entry.
+    """
+    by_owner: dict[str, list[ObjectiveTerm]] = {}
+    for rule in rules:
+        term = compile_rule(rule, model, vars, registry=registry)
+        if term is not None:
+            by_owner.setdefault(rule.owner_id, []).append(term)
+    return by_owner
 
 
 # Importing the per-type compiler modules registers their RuleCompiler

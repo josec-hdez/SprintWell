@@ -12,14 +12,23 @@ References:
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
 from typing import Any
 
 from ortools.sat.python import cp_model
 
-from models import ProblemInput
+from models import EquityMode, ProblemInput
 
-__all__ = ["BaseModelVars", "attach_trivial_objective", "build_base_model"]
+__all__ = [
+    "BaseModelVars",
+    "attach_equity_objective",
+    "attach_trivial_objective",
+    "build_base_model",
+]
+
+_NASH_LOG_SCALE = 1000
+"""Integer scaling factor for the tabulated Nash log (CP-SAT works in integers)."""
 
 
 @dataclass(frozen=True)
@@ -156,6 +165,85 @@ def attach_trivial_objective(model: Any, vars: BaseModelVars) -> None:
     makespan = model.new_int_var(0, horizon, "makespan")
     model.add_max_equality(makespan, list(vars.end.values()))
     model.minimize(makespan)
+
+
+def attach_equity_objective(
+    model: Any,
+    vars: BaseModelVars,
+    per_user_terms: dict[str, list[Any]],
+    *,
+    equity_mode: EquityMode | None = None,
+) -> None:
+    """Aggregate per-user happiness under an equity mode and set it as the objective.
+
+    Implements the three equity modes of brief §7.4. ``per_user_terms`` maps each
+    owner to the soft objective terms compiled for their rules (see
+    ``rule_compiler.compile_by_owner``). Per user we materialise a happiness
+    surrogate ``s_j = Σ terms_j`` (an integer expression: rewards minus
+    penalties — the weighted-compliance surrogate of §7.5). The reported,
+    budget-normalised ``f_j ∈ [0, 1]`` is a separate post-processing concern
+    (issue #36); here ``s_j`` is the quantity the solver optimises.
+
+    Modes (``equity_mode`` defaults to ``vars.problem.equity_mode``):
+
+    - **UTILITARIAN** — maximise ``Σ_j s_j`` (total welfare).
+    - **MAX_MIN** — maximise ``t`` with ``t ≤ s_j`` for all ``j`` (Rawlsian:
+      lift the worst-off user).
+    - **NASH** — maximise ``Σ_j log(s_j)``. CP-SAT is integer-only, so the
+      concave log is tabulated: ``s_j`` is bound, via ``add_allowed_assignments``,
+      to ``round(SCALE · log(max(0, s_j) + 1))`` over its integer domain. The
+      ``max(0, ·)`` clamp keeps the argument ≥ 1 (net-negative happiness scores
+      0, the worst) while preserving the log's curvature across the meaningful
+      ``[0, B]`` range — a flat shift like ``+ B`` would wash the curvature out
+      and collapse Nash into utilitarian. Tabulation cost grows with the score
+      range ``B``; fine for the instance sizes here, a refinement
+      (piecewise-linear log) is noted for scale.
+
+    Users with no soft terms are *excluded* (a user with no preferences neither
+    helps nor hurts any aggregate). When no user has soft terms, this falls back
+    to :func:`attach_trivial_objective` so the model still has a meaningful
+    objective.
+    """
+    problem = vars.problem
+    mode = equity_mode if equity_mode is not None else problem.equity_mode
+
+    relevant = {owner: terms for owner, terms in per_user_terms.items() if terms}
+    if not relevant:
+        attach_trivial_objective(model, vars)
+        return
+
+    # Safe symmetric bound on s_j: every term is weight·(count ≤ #tasks), so
+    # |s_j| ≤ Σ weights · #tasks. Pad by one to keep strict headroom.
+    total_weight = sum(rule.weight for rule in problem.rules)
+    bound = (total_weight + 1) * (len(problem.tasks) + 1)
+
+    scores: list[Any] = []
+    for owner, terms in relevant.items():
+        happiness = model.new_int_var(-bound, bound, f"happiness_{owner}")
+        model.add(happiness == sum(terms))
+        scores.append(happiness)
+
+    if mode == EquityMode.UTILITARIAN:
+        model.maximize(sum(scores))
+    elif mode == EquityMode.MAX_MIN:
+        worst = model.new_int_var(-bound, bound, "min_happiness")
+        for happiness in scores:
+            model.add(worst <= happiness)
+        model.maximize(worst)
+    elif mode == EquityMode.NASH:
+        table = [
+            [value, round(_NASH_LOG_SCALE * math.log(max(0, value) + 1))]
+            for value in range(-bound, bound + 1)
+        ]
+        max_log = round(_NASH_LOG_SCALE * math.log(bound + 1))
+        log_vars: list[Any] = []
+        for index, happiness in enumerate(scores):
+            log_var = model.new_int_var(0, max_log, f"nash_log_{index}")
+            model.add_allowed_assignments([happiness, log_var], table)
+            log_vars.append(log_var)
+        model.maximize(sum(log_vars))
+    else:  # pragma: no cover - EquityMode is a closed enum
+        raise ValueError(f"Unknown equity mode {mode!r}")
 
 
 def _add_r1_uniqueness(

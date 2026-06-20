@@ -23,7 +23,7 @@ from models import (
     SolverStats,
 )
 
-from .cpsat import BaseModelVars, attach_trivial_objective, build_base_model
+from .cpsat import BaseModelVars, attach_equity_objective, build_base_model
 
 __all__ = ["solve", "solve_problem"]
 
@@ -43,8 +43,7 @@ def _timeout_message_with_solution(wall_seconds: float) -> str:
 
 def _timeout_message_no_solution(wall_seconds: float) -> str:
     return (
-        f"Se alcanzó el tiempo máximo ({wall_seconds:.1f} s) sin encontrar "
-        "una solución factible."
+        f"Se alcanzó el tiempo máximo ({wall_seconds:.1f} s) sin encontrar una solución factible."
     )
 
 
@@ -155,7 +154,22 @@ def solve(model: Any, vars: BaseModelVars, *, time_budget_s: float) -> SolverOut
 
 
 def solve_problem(problem: ProblemInput) -> SolverOutput:
-    """End-to-end: build the base model, attach trivial objective, solve, report."""
-    model, model_vars = build_base_model(problem)
-    attach_trivial_objective(model, model_vars)
+    """End-to-end: build the base model, compile rules, aggregate by equity mode, solve.
+
+    LEARN_SKILL rules relax R6, so their map is derived first and fed to
+    ``build_base_model`` (R6 is a build-time pre-filter). Soft rules are then
+    compiled and grouped per owner, and aggregated under the problem's
+    ``equity_mode`` (brief §7.4). With no soft rules the equity attacher falls
+    back to the trivial makespan objective.
+    """
+    # Imported lazily to break the import cycle: ``rule_compiler`` imports
+    # ``solvers.cpsat`` (triggering this package's __init__, which imports this
+    # module), so a top-level import here would be circular.
+    from rule_compiler import compile_by_owner
+    from rule_compiler.learn_skill import learning_skills_per_user
+
+    relaxation = learning_skills_per_user(problem.rules)
+    model, model_vars = build_base_model(problem, learning_skills_per_user=relaxation)
+    per_user_terms = compile_by_owner(problem.rules, model, model_vars)
+    attach_equity_objective(model, model_vars, per_user_terms)
     return solve(model, model_vars, time_budget_s=problem.time_budget_s)
