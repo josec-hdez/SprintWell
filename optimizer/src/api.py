@@ -1,6 +1,8 @@
 """FastAPI entry point for the SprintWell optimizer microservice."""
 
-from fastapi import FastAPI, HTTPException, Request
+from typing import Annotated, Literal
+
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.responses import JSONResponse
 
 # Eager import: if the OR-Tools native library cannot load, fail at startup
@@ -9,7 +11,11 @@ from ortools.sat.python import cp_model  # noqa: F401
 from pydantic import ValidationError
 
 from models import ProblemInput, SolverOutput
+from solvers.random import solve_random
 from solvers.runner import solve_problem
+
+Algorithm = Literal["cpsat", "random"]
+"""Selectable solver algorithms (brief §8): CP-SAT optimiser or random baseline."""
 
 app = FastAPI(
     title="SprintWell Optimizer",
@@ -31,10 +37,17 @@ def health() -> dict[str, str]:
     description=(
         "Receives a `ProblemInput` and returns a `SolverOutput` per brief §8.1. "
         "Frontier of the optimizer microservice; called synchronously by the backend (§4.3). "
-        "Timeout is configured via `ProblemInput.time_budget_s` (default 30 s)."
+        "Timeout is configured via `ProblemInput.time_budget_s` (default 30 s). "
+        "`algorithm` selects the CP-SAT optimiser (default) or the random baseline (§8.2)."
     ),
 )
-async def post_solve(request: Request) -> SolverOutput | JSONResponse:
+async def post_solve(
+    request: Request,
+    algorithm: Annotated[
+        Algorithm,
+        Query(description="Solver to run: `cpsat` (optimiser) or `random` (baseline)."),
+    ] = "cpsat",
+) -> SolverOutput | JSONResponse:
     # The contract models use ``strict=True`` (see models._Strict), which
     # rejects the standard JSON coercions (date strings → date, enum strings
     # → StrEnum) on the Python-validation path FastAPI uses by default.
@@ -48,6 +61,8 @@ async def post_solve(request: Request) -> SolverOutput | JSONResponse:
         return JSONResponse(status_code=422, content={"detail": exc.errors(include_url=False)})
 
     try:
+        if algorithm == "random":
+            return solve_random(problem)
         return solve_problem(problem)
     except RuntimeError as exc:
         # MODEL_INVALID from CP-SAT — builder bug, surface as 500.
