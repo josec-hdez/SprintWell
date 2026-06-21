@@ -33,6 +33,7 @@ from models import (
     AvoidWeekdayParams,
     BlackoutDateParams,
     CooldownAfterParams,
+    EquityMode,
     FocusPreferenceParams,
     LearnSkillParams,
     MaxTasksPerSprintParams,
@@ -69,6 +70,12 @@ EXIT_BAD_ARGS = 2
 _START_DATE = date(2026, 5, 4)  # a Monday — keeps weekday rules legible
 _DOMAINS = ("auth", "billing", "payments", "infra", "data")
 _RULE_SLOTS = 4  # per-user Bernoulli trials; expected rules ≈ rule_density · 4
+
+_EQUITY_MODES = {
+    "utilitarian": EquityMode.UTILITARIAN,
+    "max-min": EquityMode.MAX_MIN,
+    "nash": EquityMode.NASH,
+}
 
 
 def _make_rule(  # noqa: C901
@@ -192,6 +199,7 @@ def generate_instance(
     rule_density: float,
     conflict_density: float,
     seed: int,
+    equity_mode: EquityMode = EquityMode.UTILITARIAN,
 ) -> ProblemInput:
     """Generate a reproducible, schema-valid ``ProblemInput`` (brief §9)."""
     rng = random.Random(seed)
@@ -268,6 +276,7 @@ def generate_instance(
         tasks=task_list,
         skills=catalog,
         rules=rules,
+        equity_mode=equity_mode,
     )
 
 
@@ -283,6 +292,13 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--rule-density", type=float, default=0.6, help="Rules per user, 0-1.")
     parser.add_argument("--conflict-density", type=float, default=0.1, help="Conflict prob, 0-1.")
     parser.add_argument("--seed", type=int, default=42, help="RNG seed for reproducibility.")
+    parser.add_argument(
+        "--equity-mode",
+        type=str,
+        choices=sorted(_EQUITY_MODES),
+        default="utilitarian",
+        help="Equity aggregation mode recorded on the instance.",
+    )
     parser.add_argument("--out", type=str, default="-", help="Output path ('-' writes to stdout).")
     return parser
 
@@ -321,6 +337,7 @@ def main(argv: list[str] | None = None) -> int:
             rule_density=args.rule_density,
             conflict_density=args.conflict_density,
             seed=args.seed,
+            equity_mode=_EQUITY_MODES[args.equity_mode],
         )
     except ValidationError as exc:  # pragma: no cover - defensive; generation stays valid
         print(f"error: generated an invalid instance: {exc}", file=sys.stderr)

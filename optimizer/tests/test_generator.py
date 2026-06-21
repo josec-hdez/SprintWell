@@ -12,7 +12,7 @@ from pathlib import Path
 import pytest
 
 from cli.generator import EXIT_BAD_ARGS, EXIT_OK, generate_instance, main
-from models import ProblemInput
+from models import EquityMode, ProblemInput
 
 
 def test_same_seed_is_reproducible() -> None:
@@ -101,3 +101,41 @@ def test_cli_rejects_bad_arguments(capsys: pytest.CaptureFixture[str]) -> None:
     """Out-of-range parameters exit with the bad-args code."""
     assert main(["--users", "0", "--out", "-"]) == EXIT_BAD_ARGS
     assert main(["--rule-density", "1.5", "--out", "-"]) == EXIT_BAD_ARGS
+
+
+def test_equity_mode_is_recorded_on_the_instance() -> None:
+    """The ``equity_mode`` argument is reflected on the generated instance."""
+    instance = generate_instance(
+        users=3,
+        tasks=5,
+        days=5,
+        skills=2,
+        rule_density=0.5,
+        conflict_density=0.0,
+        seed=1,
+        equity_mode=EquityMode.NASH,
+    )
+    assert instance.equity_mode == EquityMode.NASH
+
+
+def test_cli_equity_mode_flag(capsys: pytest.CaptureFixture[str]) -> None:
+    """``--equity-mode max-min`` produces an instance tagged MAX_MIN."""
+    code = main(
+        [
+            "--users",
+            "2",
+            "--tasks",
+            "3",
+            "--days",
+            "4",
+            "--skills",
+            "1",
+            "--equity-mode",
+            "max-min",
+            "--out",
+            "-",
+        ]
+    )
+    assert code == EXIT_OK
+    problem = ProblemInput.model_validate_json(capsys.readouterr().out)
+    assert problem.equity_mode == EquityMode.MAX_MIN
