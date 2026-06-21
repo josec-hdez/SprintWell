@@ -27,6 +27,15 @@ export class PrismaUserRepository extends UserRepository {
     return row ? UserMapper.toDomain(row) : null;
   }
 
+  async findAll(): Promise<User[]> {
+    const rows = await this.prisma.user.findMany({ orderBy: { createdAt: 'asc' } });
+    return rows.map((row) => UserMapper.toDomain(row));
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.prisma.user.deleteMany({ where: { id } });
+  }
+
   async save(user: User): Promise<void> {
     await this.prisma.user.upsert({
       where: { id: user.id },

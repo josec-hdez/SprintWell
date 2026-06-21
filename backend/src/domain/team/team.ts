@@ -34,4 +34,12 @@ export class Team {
     }
     return Team.create([...this.skills, skill]);
   }
+
+  /** Return a new catalog without the skill ``skillId``; rejects if absent. */
+  withoutSkill(skillId: string): Team {
+    if (!this.hasSkill(skillId)) {
+      throw new Error(`Skill id not in catalog: ${skillId}.`);
+    }
+    return Team.create(this.skills.filter((skill) => skill.id !== skillId));
+  }
 }
