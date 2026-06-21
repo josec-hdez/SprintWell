@@ -19,6 +19,7 @@ dependencies = [
 
 [project.scripts]
 sprintwell-solve = "cli:main"
+sprintwell-gen = "cli.generator:main"
 
 [project.optional-dependencies]
 dev = [
