@@ -1,0 +1,1599 @@
+{
+  "sprint": {
+    "id": "sprint_gen",
+    "name": "Generated sprint",
+    "start_date": "2026-05-04",
+    "duration_days": 18
+  },
+  "users": [
+    {
+      "id": "u0",
+      "name": "User 0",
+      "skills": [
+        {
+          "skill_id": "skill_7",
+          "level": 2
+        },
+        {
+          "skill_id": "skill_3",
+          "level": 4
+        },
+        {
+          "skill_id": "skill_1",
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": "u1",
+      "name": "User 1",
+      "skills": [
+        {
+          "skill_id": "skill_7",
+          "level": 1
+        },
+        {
+          "skill_id": "skill_6",
+          "level": 5
+        },
+        {
+          "skill_id": "skill_3",
+          "level": 3
+        }
+      ]
+    },
+    {
+      "id": "u2",
+      "name": "User 2",
+      "skills": [
+        {
+          "skill_id": "skill_3",
+          "level": 4
+        }
+      ]
+    },
+    {
+      "id": "u3",
+      "name": "User 3",
+      "skills": [
+        {
+          "skill_id": "skill_3",
+          "level": 4
+        },
+        {
+          "skill_id": "skill_6",
+          "level": 2
+        },
+        {
+          "skill_id": "skill_7",
+          "level": 4
+        },
+        {
+          "skill_id": "skill_2",
+          "level": 4
+        }
+      ]
+    },
+    {
+      "id": "u4",
+      "name": "User 4",
+      "skills": []
+    },
+    {
+      "id": "u5",
+      "name": "User 5",
+      "skills": [
+        {
+          "skill_id": "skill_3",
+          "level": 4
+        },
+        {
+          "skill_id": "skill_6",
+          "level": 4
+        },
+        {
+          "skill_id": "skill_2",
+          "level": 3
+        },
+        {
+          "skill_id": "skill_7",
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": "u6",
+      "name": "User 6",
+      "skills": [
+        {
+          "skill_id": "skill_1",
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": "u7",
+      "name": "User 7",
+      "skills": [
+        {
+          "skill_id": "skill_4",
+          "level": 2
+        },
+        {
+          "skill_id": "skill_0",
+          "level": 2
+        },
+        {
+          "skill_id": "skill_1",
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": "u8",
+      "name": "User 8",
+      "skills": [
+        {
+          "skill_id": "skill_2",
+          "level": 2
+        },
+        {
+          "skill_id": "skill_1",
+          "level": 4
+        }
+      ]
+    },
+    {
+      "id": "u9",
+      "name": "User 9",
+      "skills": [
+        {
+          "skill_id": "skill_4",
+          "level": 3
+        }
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "t0",
+      "name": "Task 0",
+      "effort_days": 1,
+      "required_skills": [
+        "skill_3"
+      ],
+      "category": "infra",
+      "domain": "auth",
+      "deadline_day": 14,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t1",
+      "name": "Task 1",
+      "effort_days": 3,
+      "required_skills": [],
+      "category": "research",
+      "domain": "data",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t2",
+      "name": "Task 2",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_5"
+      ],
+      "category": "infra",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t3",
+      "name": "Task 3",
+      "effort_days": 1,
+      "required_skills": [
+        "skill_6",
+        "skill_4"
+      ],
+      "category": "infra",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [
+        "t2"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t4",
+      "name": "Task 4",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_4",
+        "skill_5"
+      ],
+      "category": "docs",
+      "domain": "billing",
+      "deadline_day": 16,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t5",
+      "name": "Task 5",
+      "effort_days": 3,
+      "required_skills": [],
+      "category": "sre",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t6",
+      "name": "Task 6",
+      "effort_days": 1,
+      "required_skills": [],
+      "category": "sre",
+      "domain": "data",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t7",
+      "name": "Task 7",
+      "effort_days": 1,
+      "required_skills": [],
+      "category": "bug",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [
+        "t6"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t8",
+      "name": "Task 8",
+      "effort_days": 1,
+      "required_skills": [
+        "skill_0",
+        "skill_2"
+      ],
+      "category": "bug",
+      "domain": "data",
+      "deadline_day": null,
+      "depends_on": [
+        "t6"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t9",
+      "name": "Task 9",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_7",
+        "skill_0"
+      ],
+      "category": "on_call",
+      "domain": "payments",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t10",
+      "name": "Task 10",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_7"
+      ],
+      "category": "on_call",
+      "domain": "billing",
+      "deadline_day": 8,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t11",
+      "name": "Task 11",
+      "effort_days": 1,
+      "required_skills": [],
+      "category": "bug",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t12",
+      "name": "Task 12",
+      "effort_days": 3,
+      "required_skills": [],
+      "category": "feature",
+      "domain": "payments",
+      "deadline_day": 15,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t13",
+      "name": "Task 13",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_6",
+        "skill_7"
+      ],
+      "category": "sre",
+      "domain": "data",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t14",
+      "name": "Task 14",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_1"
+      ],
+      "category": "on_call",
+      "domain": "data",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t15",
+      "name": "Task 15",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_6",
+        "skill_4"
+      ],
+      "category": "on_call",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t16",
+      "name": "Task 16",
+      "effort_days": 2,
+      "required_skills": [],
+      "category": "sre",
+      "domain": "data",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t17",
+      "name": "Task 17",
+      "effort_days": 1,
+      "required_skills": [
+        "skill_3",
+        "skill_2"
+      ],
+      "category": "on_call",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t18",
+      "name": "Task 18",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_5"
+      ],
+      "category": "infra",
+      "domain": "billing",
+      "deadline_day": 8,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t19",
+      "name": "Task 19",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_5",
+        "skill_7"
+      ],
+      "category": "infra",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t20",
+      "name": "Task 20",
+      "effort_days": 1,
+      "required_skills": [
+        "skill_5"
+      ],
+      "category": "research",
+      "domain": "payments",
+      "deadline_day": 14,
+      "depends_on": [
+        "t1"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t21",
+      "name": "Task 21",
+      "effort_days": 2,
+      "required_skills": [],
+      "category": "research",
+      "domain": "infra",
+      "deadline_day": 5,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t22",
+      "name": "Task 22",
+      "effort_days": 1,
+      "required_skills": [],
+      "category": "on_call",
+      "domain": "auth",
+      "deadline_day": 12,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t23",
+      "name": "Task 23",
+      "effort_days": 2,
+      "required_skills": [],
+      "category": "docs",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t24",
+      "name": "Task 24",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_3"
+      ],
+      "category": "infra",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t25",
+      "name": "Task 25",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_3",
+        "skill_2"
+      ],
+      "category": "bug",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t26",
+      "name": "Task 26",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_3",
+        "skill_4"
+      ],
+      "category": "feature",
+      "domain": "payments",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t27",
+      "name": "Task 27",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_3",
+        "skill_2"
+      ],
+      "category": "infra",
+      "domain": "billing",
+      "deadline_day": 3,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t28",
+      "name": "Task 28",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_6",
+        "skill_2"
+      ],
+      "category": "sre",
+      "domain": "infra",
+      "deadline_day": 15,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t29",
+      "name": "Task 29",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_1"
+      ],
+      "category": "infra",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [
+        "t23"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t30",
+      "name": "Task 30",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_2",
+        "skill_5"
+      ],
+      "category": "feature",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t31",
+      "name": "Task 31",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_1",
+        "skill_6"
+      ],
+      "category": "feature",
+      "domain": "infra",
+      "deadline_day": 8,
+      "depends_on": [
+        "t30"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t32",
+      "name": "Task 32",
+      "effort_days": 1,
+      "required_skills": [],
+      "category": "sre",
+      "domain": "payments",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t33",
+      "name": "Task 33",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_5"
+      ],
+      "category": "docs",
+      "domain": "billing",
+      "deadline_day": 10,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t34",
+      "name": "Task 34",
+      "effort_days": 1,
+      "required_skills": [],
+      "category": "on_call",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t35",
+      "name": "Task 35",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_0"
+      ],
+      "category": "on_call",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [
+        "t29"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t36",
+      "name": "Task 36",
+      "effort_days": 1,
+      "required_skills": [],
+      "category": "research",
+      "domain": "infra",
+      "deadline_day": 7,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t37",
+      "name": "Task 37",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_4",
+        "skill_5"
+      ],
+      "category": "sre",
+      "domain": "payments",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t38",
+      "name": "Task 38",
+      "effort_days": 1,
+      "required_skills": [],
+      "category": "on_call",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t39",
+      "name": "Task 39",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_6"
+      ],
+      "category": "sre",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t40",
+      "name": "Task 40",
+      "effort_days": 1,
+      "required_skills": [
+        "skill_4",
+        "skill_1"
+      ],
+      "category": "on_call",
+      "domain": "payments",
+      "deadline_day": 4,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t41",
+      "name": "Task 41",
+      "effort_days": 1,
+      "required_skills": [
+        "skill_5",
+        "skill_1"
+      ],
+      "category": "bug",
+      "domain": "billing",
+      "deadline_day": 13,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t42",
+      "name": "Task 42",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_0",
+        "skill_6"
+      ],
+      "category": "feature",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [
+        "t22"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t43",
+      "name": "Task 43",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_4"
+      ],
+      "category": "sre",
+      "domain": "data",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t44",
+      "name": "Task 44",
+      "effort_days": 1,
+      "required_skills": [
+        "skill_6",
+        "skill_1"
+      ],
+      "category": "sre",
+      "domain": "billing",
+      "deadline_day": 9,
+      "depends_on": [
+        "t35"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t45",
+      "name": "Task 45",
+      "effort_days": 1,
+      "required_skills": [
+        "skill_2",
+        "skill_0"
+      ],
+      "category": "infra",
+      "domain": "infra",
+      "deadline_day": 16,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t46",
+      "name": "Task 46",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_5",
+        "skill_2"
+      ],
+      "category": "bug",
+      "domain": "payments",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t47",
+      "name": "Task 47",
+      "effort_days": 3,
+      "required_skills": [],
+      "category": "bug",
+      "domain": "data",
+      "deadline_day": 10,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t48",
+      "name": "Task 48",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_6",
+        "skill_1"
+      ],
+      "category": "feature",
+      "domain": "payments",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t49",
+      "name": "Task 49",
+      "effort_days": 3,
+      "required_skills": [],
+      "category": "sre",
+      "domain": "data",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t50",
+      "name": "Task 50",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_4"
+      ],
+      "category": "docs",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t51",
+      "name": "Task 51",
+      "effort_days": 3,
+      "required_skills": [],
+      "category": "on_call",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [
+        "t2"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t52",
+      "name": "Task 52",
+      "effort_days": 3,
+      "required_skills": [],
+      "category": "on_call",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t53",
+      "name": "Task 53",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_0",
+        "skill_3"
+      ],
+      "category": "feature",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t54",
+      "name": "Task 54",
+      "effort_days": 2,
+      "required_skills": [],
+      "category": "infra",
+      "domain": "data",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t55",
+      "name": "Task 55",
+      "effort_days": 2,
+      "required_skills": [],
+      "category": "docs",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t56",
+      "name": "Task 56",
+      "effort_days": 1,
+      "required_skills": [
+        "skill_1"
+      ],
+      "category": "docs",
+      "domain": "data",
+      "deadline_day": null,
+      "depends_on": [
+        "t46"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t57",
+      "name": "Task 57",
+      "effort_days": 1,
+      "required_skills": [
+        "skill_0"
+      ],
+      "category": "research",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t58",
+      "name": "Task 58",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_6"
+      ],
+      "category": "feature",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t59",
+      "name": "Task 59",
+      "effort_days": 1,
+      "required_skills": [
+        "skill_2",
+        "skill_5"
+      ],
+      "category": "on_call",
+      "domain": "data",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t60",
+      "name": "Task 60",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_7"
+      ],
+      "category": "sre",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [
+        "t27"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t61",
+      "name": "Task 61",
+      "effort_days": 3,
+      "required_skills": [],
+      "category": "sre",
+      "domain": "auth",
+      "deadline_day": 17,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t62",
+      "name": "Task 62",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_4",
+        "skill_0"
+      ],
+      "category": "docs",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t63",
+      "name": "Task 63",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_6",
+        "skill_4"
+      ],
+      "category": "on_call",
+      "domain": "billing",
+      "deadline_day": 5,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t64",
+      "name": "Task 64",
+      "effort_days": 1,
+      "required_skills": [
+        "skill_7"
+      ],
+      "category": "bug",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t65",
+      "name": "Task 65",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_0",
+        "skill_1"
+      ],
+      "category": "research",
+      "domain": "infra",
+      "deadline_day": 17,
+      "depends_on": [
+        "t53"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t66",
+      "name": "Task 66",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_3",
+        "skill_2"
+      ],
+      "category": "on_call",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t67",
+      "name": "Task 67",
+      "effort_days": 2,
+      "required_skills": [],
+      "category": "sre",
+      "domain": "billing",
+      "deadline_day": 6,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t68",
+      "name": "Task 68",
+      "effort_days": 3,
+      "required_skills": [],
+      "category": "feature",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [
+        "t50"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t69",
+      "name": "Task 69",
+      "effort_days": 2,
+      "required_skills": [],
+      "category": "feature",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t70",
+      "name": "Task 70",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_2",
+        "skill_5"
+      ],
+      "category": "research",
+      "domain": "payments",
+      "deadline_day": null,
+      "depends_on": [
+        "t26"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t71",
+      "name": "Task 71",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_0",
+        "skill_2"
+      ],
+      "category": "on_call",
+      "domain": "billing",
+      "deadline_day": 10,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t72",
+      "name": "Task 72",
+      "effort_days": 3,
+      "required_skills": [],
+      "category": "sre",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t73",
+      "name": "Task 73",
+      "effort_days": 2,
+      "required_skills": [
+        "skill_0"
+      ],
+      "category": "feature",
+      "domain": "infra",
+      "deadline_day": 14,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t74",
+      "name": "Task 74",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_4"
+      ],
+      "category": "infra",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [
+        "t58"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "t75",
+      "name": "Task 75",
+      "effort_days": 3,
+      "required_skills": [
+        "skill_4",
+        "skill_5"
+      ],
+      "category": "bug",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t76",
+      "name": "Task 76",
+      "effort_days": 2,
+      "required_skills": [],
+      "category": "on_call",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t77",
+      "name": "Task 77",
+      "effort_days": 1,
+      "required_skills": [],
+      "category": "on_call",
+      "domain": "infra",
+      "deadline_day": 3,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t78",
+      "name": "Task 78",
+      "effort_days": 2,
+      "required_skills": [],
+      "category": "sre",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "t79",
+      "name": "Task 79",
+      "effort_days": 3,
+      "required_skills": [],
+      "category": "bug",
+      "domain": "infra",
+      "deadline_day": 9,
+      "depends_on": [],
+      "status": "TODO"
+    }
+  ],
+  "skills": [
+    {
+      "id": "skill_0",
+      "name": "Skill 0"
+    },
+    {
+      "id": "skill_1",
+      "name": "Skill 1"
+    },
+    {
+      "id": "skill_2",
+      "name": "Skill 2"
+    },
+    {
+      "id": "skill_3",
+      "name": "Skill 3"
+    },
+    {
+      "id": "skill_4",
+      "name": "Skill 4"
+    },
+    {
+      "id": "skill_5",
+      "name": "Skill 5"
+    },
+    {
+      "id": "skill_6",
+      "name": "Skill 6"
+    },
+    {
+      "id": "skill_7",
+      "name": "Skill 7"
+    }
+  ],
+  "rules": [
+    {
+      "id": "r_u1_1",
+      "owner_id": "u1",
+      "weight": 34,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_WEEKDAY",
+      "params": {
+        "weekday": "friday"
+      }
+    },
+    {
+      "id": "r_u1_3",
+      "owner_id": "u1",
+      "weight": 54,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "AVOID_CATEGORY",
+      "params": {
+        "category": "feature"
+      }
+    },
+    {
+      "id": "r_u1_cp",
+      "owner_id": "u1",
+      "weight": 50,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_CATEGORY",
+      "params": {
+        "category": "infra"
+      }
+    },
+    {
+      "id": "r_u1_ca",
+      "owner_id": "u1",
+      "weight": 50,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "AVOID_CATEGORY",
+      "params": {
+        "category": "infra"
+      }
+    },
+    {
+      "id": "r_u2_2",
+      "owner_id": "u2",
+      "weight": 34,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "FOCUS_PREFERENCE",
+      "params": {}
+    },
+    {
+      "id": "r_u2_3",
+      "owner_id": "u2",
+      "weight": 40,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_WEEKDAY",
+      "params": {
+        "weekday": "friday"
+      }
+    },
+    {
+      "id": "r_u3_0",
+      "owner_id": "u3",
+      "weight": 30,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "COOLDOWN_AFTER",
+      "params": {
+        "after_category": "infra",
+        "rest_days": 2
+      }
+    },
+    {
+      "id": "r_u3_1",
+      "owner_id": "u3",
+      "weight": 42,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_CATEGORY",
+      "params": {
+        "category": "infra"
+      }
+    },
+    {
+      "id": "r_u3_3",
+      "owner_id": "u3",
+      "weight": 29,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "AVOID_CATEGORY",
+      "params": {
+        "category": "on_call"
+      }
+    },
+    {
+      "id": "r_u3_cp",
+      "owner_id": "u3",
+      "weight": 50,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_CATEGORY",
+      "params": {
+        "category": "research"
+      }
+    },
+    {
+      "id": "r_u3_ca",
+      "owner_id": "u3",
+      "weight": 50,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "AVOID_CATEGORY",
+      "params": {
+        "category": "research"
+      }
+    },
+    {
+      "id": "r_u4_0",
+      "owner_id": "u4",
+      "weight": 40,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_CATEGORY",
+      "params": {
+        "category": "research"
+      }
+    },
+    {
+      "id": "r_u4_cp",
+      "owner_id": "u4",
+      "weight": 50,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_CATEGORY",
+      "params": {
+        "category": "feature"
+      }
+    },
+    {
+      "id": "r_u4_ca",
+      "owner_id": "u4",
+      "weight": 50,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "AVOID_CATEGORY",
+      "params": {
+        "category": "feature"
+      }
+    },
+    {
+      "id": "r_u5_1",
+      "owner_id": "u5",
+      "weight": 24,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_CATEGORY",
+      "params": {
+        "category": "feature"
+      }
+    },
+    {
+      "id": "r_u5_2",
+      "owner_id": "u5",
+      "weight": 40,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "AVOID_WEEKDAY",
+      "params": {
+        "weekday": "thursday"
+      }
+    },
+    {
+      "id": "r_u5_3",
+      "owner_id": "u5",
+      "weight": 57,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "AVOID_SKILL",
+      "params": {
+        "skill_id": "skill_4"
+      }
+    },
+    {
+      "id": "r_u6_0",
+      "owner_id": "u6",
+      "weight": 47,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "FOCUS_PREFERENCE",
+      "params": {}
+    },
+    {
+      "id": "r_u6_1",
+      "owner_id": "u6",
+      "weight": 32,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "LEARN_SKILL",
+      "params": {
+        "skill_id": "skill_6",
+        "min_tasks": 2
+      }
+    },
+    {
+      "id": "r_u6_2",
+      "owner_id": "u6",
+      "weight": 18,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_SKILL",
+      "params": {
+        "skill_id": "skill_5"
+      }
+    },
+    {
+      "id": "r_u6_3",
+      "owner_id": "u6",
+      "weight": 21,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "MAX_TASKS_PER_SPRINT",
+      "params": {
+        "max_tasks": 75
+      }
+    },
+    {
+      "id": "r_u7_0",
+      "owner_id": "u7",
+      "weight": 31,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "AVOID_CATEGORY",
+      "params": {
+        "category": "research"
+      }
+    },
+    {
+      "id": "r_u7_1",
+      "owner_id": "u7",
+      "weight": 42,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_SKILL",
+      "params": {
+        "skill_id": "skill_2"
+      }
+    },
+    {
+      "id": "r_u7_2",
+      "owner_id": "u7",
+      "weight": 48,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_SKILL",
+      "params": {
+        "skill_id": "skill_4"
+      }
+    },
+    {
+      "id": "r_u7_3",
+      "owner_id": "u7",
+      "weight": 12,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "AVOID_WEEKDAY",
+      "params": {
+        "weekday": "wednesday"
+      }
+    },
+    {
+      "id": "r_u8_3",
+      "owner_id": "u8",
+      "weight": 13,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_SKILL",
+      "params": {
+        "skill_id": "skill_0"
+      }
+    },
+    {
+      "id": "r_u9_0",
+      "owner_id": "u9",
+      "weight": 50,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_WEEKDAY",
+      "params": {
+        "weekday": "friday"
+      }
+    },
+    {
+      "id": "r_u9_1",
+      "owner_id": "u9",
+      "weight": 24,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_DOMAIN",
+      "params": {
+        "domain": "payments"
+      }
+    },
+    {
+      "id": "r_u9_2",
+      "owner_id": "u9",
+      "weight": 39,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "FOCUS_PREFERENCE",
+      "params": {}
+    },
+    {
+      "id": "r_u9_3",
+      "owner_id": "u9",
+      "weight": 53,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "LEARN_SKILL",
+      "params": {
+        "skill_id": "skill_0",
+        "min_tasks": 3
+      }
+    }
+  ],
+  "equity_mode": "NASH",
+  "time_budget_s": 30.0
+}
