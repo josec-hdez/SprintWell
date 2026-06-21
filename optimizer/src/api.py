@@ -11,11 +11,13 @@ from ortools.sat.python import cp_model  # noqa: F401
 from pydantic import ValidationError
 
 from models import ProblemInput, SolverOutput
+from solvers.greedy import solve_greedy
 from solvers.random import solve_random
 from solvers.runner import solve_problem
 
-Algorithm = Literal["cpsat", "random"]
-"""Selectable solver algorithms (brief §8): CP-SAT optimiser or random baseline."""
+Algorithm = Literal["cpsat", "random", "greedy"]
+"""Selectable solver algorithms (brief §8): CP-SAT optimiser, or the random /
+greedy skill-match baselines (§8.2-§8.3)."""
 
 app = FastAPI(
     title="SprintWell Optimizer",
@@ -45,7 +47,9 @@ async def post_solve(
     request: Request,
     algorithm: Annotated[
         Algorithm,
-        Query(description="Solver to run: `cpsat` (optimiser) or `random` (baseline)."),
+        Query(
+            description="Solver to run: `cpsat` (optimiser), or `random` / `greedy` (baselines)."
+        ),
     ] = "cpsat",
 ) -> SolverOutput | JSONResponse:
     # The contract models use ``strict=True`` (see models._Strict), which
@@ -63,6 +67,8 @@ async def post_solve(
     try:
         if algorithm == "random":
             return solve_random(problem)
+        if algorithm == "greedy":
+            return solve_greedy(problem)
         return solve_problem(problem)
     except RuntimeError as exc:
         # MODEL_INVALID from CP-SAT — builder bug, surface as 500.
