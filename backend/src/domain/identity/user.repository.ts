@@ -14,6 +14,12 @@ export abstract class UserRepository {
   /** Return the user with this email (case-insensitive), or `null`. */
   abstract findByEmail(email: string): Promise<User | null>;
 
+  /** Return every user (admin member listing). */
+  abstract findAll(): Promise<User[]>;
+
   /** Insert or update the user (upsert by id). */
   abstract save(user: User): Promise<void>;
+
+  /** Remove the user with this id (no-op if absent). */
+  abstract delete(id: string): Promise<void>;
 }
