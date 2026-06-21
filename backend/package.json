@@ -23,10 +23,12 @@
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
+    "prisma:seed": "prisma db seed",
     "postinstall": "prisma generate"
   },
   "prisma": {
-    "schema": "src/infrastructure/persistence/prisma/schema.prisma"
+    "schema": "src/infrastructure/persistence/prisma/schema.prisma",
+    "seed": "ts-node src/infrastructure/persistence/prisma/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.0",

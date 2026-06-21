@@ -1,20 +1,19 @@
-// SprintWell — base Prisma schema.
+// SprintWell — Prisma schema (issue #42).
 //
-// Location pinned by brief §14 (backend layout): the Prisma schema and its
-// migrations live INSIDE the infrastructure layer, at
-//   backend/src/infrastructure/persistence/prisma/
-// so that "Prisma is an infrastructure concern" is physically true and not
-// just conceptual. The custom path is resolved automatically because
-// package.json has `"prisma": { "schema": "src/infrastructure/persistence/prisma/schema.prisma" }`.
+// Location pinned by brief §14: the Prisma schema and its migrations live INSIDE
+// the infrastructure layer (backend/src/infrastructure/persistence/prisma/), so
+// "Prisma is an infrastructure concern" is physically true. The custom path is
+// resolved via package.json `"prisma": { "schema": "..." }`.
 //
-// Datasource follows brief §4.2: PostgreSQL 16 (provider = "postgresql"),
-// jsonb columns will be added in week 4 when the real domain models land.
+// Models cover the seven domain entities of brief §5.1 — User, Skill, Sprint,
+// Task, Rule, PlanningRun, Assignment — plus the UserSkill join that carries the
+// per-user proficiency level. Rule `params` is a native JSONB column (brief
+// §4.2 / §6.1). Enum value names mirror the optimizer wire contract
+// (optimizer/src/models.py) so the Domain→ProblemInput adapter (issue #61) maps
+// cleanly. DB identifiers are snake_case via @map / @@map.
 //
-// Week-1 bootstrap (issue #12): only a SystemHealth placeholder so the migration
-// pipeline (datasource, client generation, migrate dev) is validated end-to-end
-// BEFORE the real schema (User / Skill / Sprint / Task / Rule / PlanningRun /
-// Assignment) arrives in week 4. This model is scheduled for deletion at that
-// point — no code in this repo imports it.
+// The week-1 SystemHealth placeholder is removed here, as planned (issue #12):
+// no code imports the Prisma model (GET /health is served by a fake repository).
 
 generator client {
   provider = "prisma-client-js"
@@ -25,15 +24,195 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/// Placeholder model — proves the CREATE TABLE flow end-to-end during week 1.
-/// Mirrors the SystemHealth value object from issue #11 (domain/shared/system-health.ts)
-/// only by shape — there is no runtime wiring. The FakeSystemHealthRepository
-/// continues to serve GET /health. This table will be dropped in week 4 by the
-/// migration that introduces the real domain entities.
-model SystemHealth {
-  id        String   @id @default(uuid())
-  status    String
-  checkedAt DateTime @default(now()) @map("checked_at")
+// ---------------------------------------------------------------------------
+// Enums (brief §5, §6.3, §7.4, §8.1).
+// ---------------------------------------------------------------------------
 
-  @@map("system_health")
+/// Authorization role — a backend concern, not a planning input (brief §4.4).
+enum Role {
+  MEMBER
+  ADMIN
+}
+
+/// Task category (brief §6.3, Forma A).
+enum TaskCategory {
+  FEATURE
+  BUG
+  INFRA
+  SRE
+  ON_CALL
+  DOCS
+  RESEARCH
+}
+
+/// Task lifecycle status (brief §5, §17).
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+  BLOCKED
+}
+
+/// The twelve rule types frozen in schema_version = 1 (brief §6.3).
+enum RuleType {
+  PREFER_SKILL
+  AVOID_SKILL
+  PREFER_CATEGORY
+  AVOID_CATEGORY
+  PREFER_DOMAIN
+  PREFER_WEEKDAY
+  AVOID_WEEKDAY
+  BLACKOUT_DATE
+  MAX_TASKS_PER_SPRINT
+  FOCUS_PREFERENCE
+  COOLDOWN_AFTER
+  LEARN_SKILL
+}
+
+/// Equity aggregation mode (brief §7.4).
+enum EquityMode {
+  UTILITARIAN
+  MAX_MIN
+  NASH
+}
+
+/// Planning algorithm used for a run (brief §8, §10.1).
+enum PlanningStrategy {
+  CPSAT
+  RANDOM
+  GREEDY
+}
+
+/// Solver terminal status (brief §8.1).
+enum RunStatus {
+  OPTIMAL
+  FEASIBLE
+  INFEASIBLE
+  TIMEOUT
+}
+
+// ---------------------------------------------------------------------------
+// Entities (brief §5.1).
+// ---------------------------------------------------------------------------
+
+model User {
+  id           String       @id @default(uuid())
+  email        String       @unique
+  name         String
+  passwordHash String       @map("password_hash")
+  role         Role         @default(MEMBER)
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  skills       UserSkill[]
+  rules        Rule[]
+  assignments  Assignment[]
+
+  @@map("users")
+}
+
+model Skill {
+  id        String      @id @default(uuid())
+  name      String      @unique
+  createdAt DateTime    @default(now()) @map("created_at")
+  users     UserSkill[]
+  tasks     Task[]      @relation("TaskRequiredSkills")
+
+  @@map("skills")
+}
+
+/// Per-user skill proficiency (level 1-5, brief §5). Join table with payload.
+model UserSkill {
+  userId  String @map("user_id")
+  skillId String @map("skill_id")
+  level   Int
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill   Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([userId, skillId])
+  @@map("user_skills")
+}
+
+model Sprint {
+  id           String        @id @default(uuid())
+  name         String
+  startDate    DateTime      @map("start_date") @db.Date
+  durationDays Int           @map("duration_days")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  tasks        Task[]
+  planningRuns PlanningRun[]
+
+  @@map("sprints")
+}
+
+model Task {
+  id             String       @id @default(uuid())
+  sprintId       String       @map("sprint_id")
+  name           String
+  effortDays     Int          @map("effort_days")
+  category       TaskCategory
+  domain         String
+  deadlineDay    Int?         @map("deadline_day")
+  status         TaskStatus   @default(TODO)
+  createdAt      DateTime     @default(now()) @map("created_at")
+  sprint         Sprint       @relation(fields: [sprintId], references: [id], onDelete: Cascade)
+  requiredSkills Skill[]      @relation("TaskRequiredSkills")
+  // Self-referential dependency DAG: a task depends on others / is depended on.
+  dependsOn      Task[]       @relation("TaskDependencies")
+  dependents     Task[]       @relation("TaskDependencies")
+  assignments    Assignment[]
+
+  @@map("tasks")
+}
+
+/// Preference rule envelope (brief §6.1). `params` is JSONB, shape per `type`.
+model Rule {
+  id            String   @id @default(uuid())
+  ownerId       String   @map("owner_id")
+  type          RuleType
+  params        Json
+  weight        Int      @default(0)
+  isHard        Boolean  @default(false) @map("is_hard")
+  enabled       Boolean  @default(true)
+  schemaVersion Int      @default(1) @map("schema_version")
+  createdAt     DateTime @default(now()) @map("created_at")
+  owner         User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId])
+  @@map("rules")
+}
+
+/// A persisted optimizer run for a sprint (brief §8.1, §10.1).
+model PlanningRun {
+  id               String           @id @default(uuid())
+  sprintId         String           @map("sprint_id")
+  strategy         PlanningStrategy
+  equityMode       EquityMode       @map("equity_mode")
+  status           RunStatus
+  objectiveValue   Float?           @map("objective_value")
+  message          String?
+  perUserHappiness Json?            @map("per_user_happiness")
+  ruleEvaluations  Json?            @map("rule_evaluations")
+  solverStats      Json?            @map("solver_stats")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  sprint           Sprint           @relation(fields: [sprintId], references: [id], onDelete: Cascade)
+  assignments      Assignment[]
+
+  @@index([sprintId])
+  @@map("planning_runs")
+}
+
+/// One task→user placement within a planning run (brief §8.1).
+model Assignment {
+  id            String      @id @default(uuid())
+  planningRunId String      @map("planning_run_id")
+  taskId        String      @map("task_id")
+  userId        String      @map("user_id")
+  startDay      Int         @map("start_day")
+  planningRun   PlanningRun @relation(fields: [planningRunId], references: [id], onDelete: Cascade)
+  task          Task        @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([planningRunId, taskId])
+  @@index([userId])
+  @@map("assignments")
 }
