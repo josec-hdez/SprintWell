@@ -1,5 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
+import { APP_FILTER, APP_PIPE } from '@nestjs/core';
 import { SystemHealthInfrastructureModule } from './infrastructure/config/system-health.module.js';
+import { TeamInfrastructureModule } from './infrastructure/config/team.module.js';
+import { ApplicationExceptionFilter } from './presentation/filters/application-exception.filter.js';
+import { TeamAdminModule } from './presentation/http/admin/team/team-admin.module.js';
 import { HealthModule } from './presentation/http/public/health.module.js';
 
 /**
@@ -23,6 +27,21 @@ import { HealthModule } from './presentation/http/public/health.module.js';
  * (trigger: when the composition root exceeds ~5 cross-layer imports).
  */
 @Module({
-  imports: [SystemHealthInfrastructureModule, HealthModule],
+  imports: [
+    SystemHealthInfrastructureModule,
+    HealthModule,
+    TeamInfrastructureModule,
+    TeamAdminModule,
+  ],
+  providers: [
+    // Global request validation (class-validator on DTOs) and a filter that
+    // maps application errors to HTTP status codes — registered via DI so they
+    // also apply under the e2e testing harness, not only the main bootstrap.
+    {
+      provide: APP_PIPE,
+      useValue: new ValidationPipe({ whitelist: true, transform: true }),
+    },
+    { provide: APP_FILTER, useClass: ApplicationExceptionFilter },
+  ],
 })
 export class AppModule {}
