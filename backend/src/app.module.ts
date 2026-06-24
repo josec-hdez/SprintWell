@@ -1,10 +1,13 @@
 import { Module, ValidationPipe } from '@nestjs/common';
 import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { SprintInfrastructureModule } from './infrastructure/config/sprint.module.js';
 import { SystemHealthInfrastructureModule } from './infrastructure/config/system-health.module.js';
 import { TeamInfrastructureModule } from './infrastructure/config/team.module.js';
 import { ApplicationExceptionFilter } from './presentation/filters/application-exception.filter.js';
+import { SprintAdminModule } from './presentation/http/admin/sprint/sprint.module.js';
 import { TeamAdminModule } from './presentation/http/admin/team/team-admin.module.js';
 import { HealthModule } from './presentation/http/public/health.module.js';
+import { SprintPublicModule } from './presentation/http/public/sprint.module.js';
 
 /**
  * Composition root (brief §14, §14.1).
@@ -32,6 +35,9 @@ import { HealthModule } from './presentation/http/public/health.module.js';
     HealthModule,
     TeamInfrastructureModule,
     TeamAdminModule,
+    SprintInfrastructureModule,
+    SprintPublicModule,
+    SprintAdminModule,
   ],
   providers: [
     // Global request validation (class-validator on DTOs) and a filter that
