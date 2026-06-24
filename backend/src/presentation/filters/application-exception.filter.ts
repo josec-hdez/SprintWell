@@ -11,6 +11,11 @@ import {
   UserNotFoundError,
 } from '../../application/identity/identity.errors.js';
 import {
+  InvalidTransitionError,
+  SprintNotFoundError,
+  TaskNotFoundError,
+} from '../../application/sprint/sprint.errors.js';
+import {
   EmailAlreadyInUseError,
   MemberNotFoundError,
   SkillNotInCatalogError,
@@ -26,6 +31,9 @@ interface HttpResponse {
   SkillNotInCatalogError,
   UserNotFoundError,
   InvalidCredentialsError,
+  SprintNotFoundError,
+  TaskNotFoundError,
+  InvalidTransitionError,
 )
 export class ApplicationExceptionFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost): void {
@@ -36,6 +44,9 @@ export class ApplicationExceptionFilter implements ExceptionFilter {
 
   private static statusFor(exception: Error): number {
     if (exception instanceof EmailAlreadyInUseError) {
+      return HttpStatus.CONFLICT;
+    }
+    if (exception instanceof InvalidTransitionError) {
       return HttpStatus.CONFLICT;
     }
     if (exception instanceof InvalidCredentialsError) {
