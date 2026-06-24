@@ -5,6 +5,7 @@
 // assignment must fit: start_day + effort_days ≤ duration_days (brief §5.2).
 
 import { Assignment } from './assignment.js';
+import type { TaskStatusValue } from './task-status.js';
 import { Task } from './task.js';
 
 export interface SprintProps {
@@ -63,6 +64,53 @@ export class Sprint {
       ...this.assignments,
       assignment,
     ]);
+  }
+
+  /** Return a new sprint with ``task`` added; rejects a duplicate task id. */
+  withTask(task: Task): Sprint {
+    if (this.findTask(task.id) !== undefined) {
+      throw new Error(`Task id already in sprint: ${task.id}.`);
+    }
+    return new Sprint(
+      this.id,
+      this.name,
+      this.startDate,
+      this.durationDays,
+      [...this.tasks, task],
+      this.assignments,
+    );
+  }
+
+  /** Return a new sprint without ``taskId`` and any assignment that referenced it. */
+  withoutTask(taskId: string): Sprint {
+    if (this.findTask(taskId) === undefined) {
+      throw new Error(`Task id not in sprint: ${taskId}.`);
+    }
+    return new Sprint(
+      this.id,
+      this.name,
+      this.startDate,
+      this.durationDays,
+      this.tasks.filter((task) => task.id !== taskId),
+      this.assignments.filter((assignment) => assignment.taskId !== taskId),
+    );
+  }
+
+  /** Return a new sprint with ``taskId`` transitioned to ``next`` (enforces legality). */
+  changeTaskStatus(taskId: string, next: TaskStatusValue): Sprint {
+    const task = this.findTask(taskId);
+    if (task === undefined) {
+      throw new Error(`Task id not in sprint: ${taskId}.`);
+    }
+    const updated = task.withStatus(task.status.transitionTo(next));
+    return new Sprint(
+      this.id,
+      this.name,
+      this.startDate,
+      this.durationDays,
+      this.tasks.map((current) => (current.id === taskId ? updated : current)),
+      this.assignments,
+    );
   }
 
   private assertFits(assignment: Assignment): void {
