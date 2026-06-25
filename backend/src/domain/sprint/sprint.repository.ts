@@ -8,6 +8,10 @@ import { Sprint } from './sprint.js';
 export abstract class SprintRepository {
   abstract findById(id: string): Promise<Sprint | null>;
 
+  /** Find the sprint that contains the task ``taskId`` (the member status route
+   *  carries only a task id), or `null` if no sprint owns it. */
+  abstract findByTaskId(taskId: string): Promise<Sprint | null>;
+
   abstract findAll(): Promise<Sprint[]>;
 
   abstract save(sprint: Sprint): Promise<void>;
