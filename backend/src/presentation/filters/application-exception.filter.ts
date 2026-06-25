@@ -14,6 +14,7 @@ import {
   InvalidTransitionError,
   SprintNotFoundError,
   TaskNotFoundError,
+  TaskOwnershipError,
 } from '../../application/sprint/sprint.errors.js';
 import {
   EmailAlreadyInUseError,
@@ -34,6 +35,7 @@ interface HttpResponse {
   SprintNotFoundError,
   TaskNotFoundError,
   InvalidTransitionError,
+  TaskOwnershipError,
 )
 export class ApplicationExceptionFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost): void {
@@ -51,6 +53,9 @@ export class ApplicationExceptionFilter implements ExceptionFilter {
     }
     if (exception instanceof InvalidCredentialsError) {
       return HttpStatus.UNAUTHORIZED;
+    }
+    if (exception instanceof TaskOwnershipError) {
+      return HttpStatus.FORBIDDEN;
     }
     return HttpStatus.NOT_FOUND;
   }
