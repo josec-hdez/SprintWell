@@ -6,6 +6,7 @@ import { TeamInfrastructureModule } from './infrastructure/config/team.module.js
 import { ApplicationExceptionFilter } from './presentation/filters/application-exception.filter.js';
 import { SprintAdminModule } from './presentation/http/admin/sprint/sprint.module.js';
 import { TeamAdminModule } from './presentation/http/admin/team/team-admin.module.js';
+import { MemberTaskModule } from './presentation/http/member/task-status.module.js';
 import { HealthModule } from './presentation/http/public/health.module.js';
 import { SprintPublicModule } from './presentation/http/public/sprint.module.js';
 
@@ -38,6 +39,7 @@ import { SprintPublicModule } from './presentation/http/public/sprint.module.js'
     SprintInfrastructureModule,
     SprintPublicModule,
     SprintAdminModule,
+    MemberTaskModule,
   ],
   providers: [
     // Global request validation (class-validator on DTOs) and a filter that
