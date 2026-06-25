@@ -22,3 +22,11 @@ export class InvalidTransitionError extends Error {
     this.name = 'InvalidTransitionError';
   }
 }
+
+/** Raised when a member tries to change the status of a task they do not own. */
+export class TaskOwnershipError extends Error {
+  constructor(taskId: string) {
+    super(`You are not assigned to task ${taskId}.`);
+    this.name = 'TaskOwnershipError';
+  }
+}
