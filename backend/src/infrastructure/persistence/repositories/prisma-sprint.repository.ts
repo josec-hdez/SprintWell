@@ -26,6 +26,14 @@ export class PrismaSprintRepository extends SprintRepository {
     return row ? SprintMapper.toDomain(row) : null;
   }
 
+  async findByTaskId(taskId: string): Promise<Sprint | null> {
+    const task = await this.prisma.task.findUnique({
+      where: { id: taskId },
+      select: { sprintId: true },
+    });
+    return task ? this.findById(task.sprintId) : null;
+  }
+
   async findAll(): Promise<Sprint[]> {
     const rows = await this.prisma.sprint.findMany({
       include: TASK_INCLUDE,
