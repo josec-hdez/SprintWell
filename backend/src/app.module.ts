@@ -1,5 +1,6 @@
 import { Module, ValidationPipe } from '@nestjs/common';
 import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { RulesInfrastructureModule } from './infrastructure/config/rules.module.js';
 import { SprintInfrastructureModule } from './infrastructure/config/sprint.module.js';
 import { SystemHealthInfrastructureModule } from './infrastructure/config/system-health.module.js';
 import { TeamInfrastructureModule } from './infrastructure/config/team.module.js';
@@ -7,6 +8,7 @@ import { ApplicationExceptionFilter } from './presentation/filters/application-e
 import { SprintAdminModule } from './presentation/http/admin/sprint/sprint.module.js';
 import { TeamAdminModule } from './presentation/http/admin/team/team-admin.module.js';
 import { MemberTaskModule } from './presentation/http/member/task-status.module.js';
+import { RulesHttpModule } from './presentation/http/rules.module.js';
 import { HealthModule } from './presentation/http/public/health.module.js';
 import { SprintPublicModule } from './presentation/http/public/sprint.module.js';
 
@@ -40,6 +42,8 @@ import { SprintPublicModule } from './presentation/http/public/sprint.module.js'
     SprintPublicModule,
     SprintAdminModule,
     MemberTaskModule,
+    RulesInfrastructureModule,
+    RulesHttpModule,
   ],
   providers: [
     // Global request validation (class-validator on DTOs) and a filter that
