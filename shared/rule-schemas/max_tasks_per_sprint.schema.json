@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "sprintwell:rule-params/MAX_TASKS_PER_SPRINT",
+  "title": "MAX_TASKS_PER_SPRINT params",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["max_tasks"],
+  "properties": { "max_tasks": { "type": "integer", "minimum": 1 } }
+}

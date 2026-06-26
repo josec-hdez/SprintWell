@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "sprintwell:rule-params/PREFER_DOMAIN",
+  "title": "PREFER_DOMAIN params",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["domain"],
+  "properties": { "domain": { "type": "string", "minLength": 1 } }
+}

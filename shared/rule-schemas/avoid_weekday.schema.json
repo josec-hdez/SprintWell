@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "sprintwell:rule-params/AVOID_WEEKDAY",
+  "title": "AVOID_WEEKDAY params",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["weekday"],
+  "properties": { "weekday": { "enum": ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"] } }
+}

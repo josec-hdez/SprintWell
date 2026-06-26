@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "sprintwell:rule-params/PREFER_SKILL",
+  "title": "PREFER_SKILL params",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["skill_id"],
+  "properties": { "skill_id": { "type": "string", "minLength": 1 } }
+}
