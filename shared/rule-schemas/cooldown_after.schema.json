@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "sprintwell:rule-params/COOLDOWN_AFTER",
+  "title": "COOLDOWN_AFTER params",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["after_category", "rest_days"],
+  "properties": {
+    "after_category": { "enum": ["feature", "bug", "infra", "sre", "on_call", "docs", "research"] },
+    "rest_days": { "type": "integer", "minimum": 0 }
+  }
+}

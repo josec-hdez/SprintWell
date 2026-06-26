@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "description": "Single source of truth for rule param shapes (brief §6.1, §6.5). Consumed by backend (ajv) and optimizer (Pydantic parity).",
+  "types": {
+    "PREFER_SKILL": "prefer_skill.schema.json",
+    "AVOID_SKILL": "avoid_skill.schema.json",
+    "PREFER_CATEGORY": "prefer_category.schema.json",
+    "AVOID_CATEGORY": "avoid_category.schema.json",
+    "PREFER_DOMAIN": "prefer_domain.schema.json",
+    "PREFER_WEEKDAY": "prefer_weekday.schema.json",
+    "AVOID_WEEKDAY": "avoid_weekday.schema.json",
+    "BLACKOUT_DATE": "blackout_date.schema.json",
+    "MAX_TASKS_PER_SPRINT": "max_tasks_per_sprint.schema.json",
+    "FOCUS_PREFERENCE": "focus_preference.schema.json",
+    "COOLDOWN_AFTER": "cooldown_after.schema.json",
+    "LEARN_SKILL": "learn_skill.schema.json"
+  }
+}
