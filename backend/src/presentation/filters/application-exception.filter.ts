@@ -17,6 +17,11 @@ import {
   TaskOwnershipError,
 } from '../../application/sprint/sprint.errors.js';
 import {
+  RuleAuthorizationError,
+  RuleConflictError,
+  RuleNotFoundError,
+} from '../../application/rules/rules.errors.js';
+import {
   EmailAlreadyInUseError,
   MemberNotFoundError,
   SkillNotInCatalogError,
@@ -36,25 +41,31 @@ interface HttpResponse {
   TaskNotFoundError,
   InvalidTransitionError,
   TaskOwnershipError,
+  RuleAuthorizationError,
+  RuleConflictError,
+  RuleNotFoundError,
 )
 export class ApplicationExceptionFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost): void {
     const status = ApplicationExceptionFilter.statusFor(exception);
-    const response = host.switchToHttp().getResponse<HttpResponse>();
-    response.status(status).json({ statusCode: status, message: exception.message });
+    const body: Record<string, unknown> = { statusCode: status, message: exception.message };
+    if (exception instanceof RuleConflictError) {
+      body.conflicts = exception.conflicts;
+    }
+    host.switchToHttp().getResponse<HttpResponse>().status(status).json(body);
   }
 
   private static statusFor(exception: Error): number {
     if (exception instanceof EmailAlreadyInUseError) {
       return HttpStatus.CONFLICT;
     }
-    if (exception instanceof InvalidTransitionError) {
+    if (exception instanceof InvalidTransitionError || exception instanceof RuleConflictError) {
       return HttpStatus.CONFLICT;
     }
     if (exception instanceof InvalidCredentialsError) {
       return HttpStatus.UNAUTHORIZED;
     }
-    if (exception instanceof TaskOwnershipError) {
+    if (exception instanceof TaskOwnershipError || exception instanceof RuleAuthorizationError) {
       return HttpStatus.FORBIDDEN;
     }
     return HttpStatus.NOT_FOUND;
