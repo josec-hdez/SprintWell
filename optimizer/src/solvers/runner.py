@@ -64,16 +64,25 @@ def _extract_assignments(solver: Any, vars: BaseModelVars) -> list[Assignment]:
     return result
 
 
-def solve(model: Any, vars: BaseModelVars, *, time_budget_s: float) -> SolverOutput:
+def solve(
+    model: Any,
+    vars: BaseModelVars,
+    *,
+    time_budget_s: float,
+    random_seed: int | None = None,
+) -> SolverOutput:
     """Solve a pre-built CP-SAT model and produce a ``SolverOutput`` per brief §8.1.
 
     The model is expected to already have whatever objective is desired
     attached (e.g. via :func:`attach_trivial_objective` or a future equity
     attacher). ``MODEL_INVALID`` raises — that indicates a builder bug, not
-    a problem-side issue.
+    a problem-side issue. ``random_seed`` makes the search reproducible
+    (used by the benchmark to vary CP-SAT across seeds).
     """
     solver = cp_model.CpSolver()
     solver.parameters.max_time_in_seconds = time_budget_s
+    if random_seed is not None:
+        solver.parameters.random_seed = random_seed
     status = solver.solve(model)
     wall_seconds = float(solver.wall_time)
     wall_time_ms = wall_seconds * 1000.0
@@ -156,7 +165,7 @@ def solve(model: Any, vars: BaseModelVars, *, time_budget_s: float) -> SolverOut
     )
 
 
-def solve_problem(problem: ProblemInput) -> SolverOutput:
+def solve_problem(problem: ProblemInput, *, random_seed: int | None = None) -> SolverOutput:
     """End-to-end: build the base model, compile rules, aggregate by equity mode, solve.
 
     LEARN_SKILL rules relax R6, so their map is derived first and fed to
@@ -175,4 +184,4 @@ def solve_problem(problem: ProblemInput) -> SolverOutput:
     model, model_vars = build_base_model(problem, learning_skills_per_user=relaxation)
     per_user_terms = compile_by_owner(problem.rules, model, model_vars)
     attach_equity_objective(model, model_vars, per_user_terms)
-    return solve(model, model_vars, time_budget_s=problem.time_budget_s)
+    return solve(model, model_vars, time_budget_s=problem.time_budget_s, random_seed=random_seed)
