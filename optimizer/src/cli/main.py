@@ -25,8 +25,17 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from models import ProblemInput, RunStatus
+from models import EquityMode, ProblemInput, RunStatus
+from solvers.greedy import solve_greedy
+from solvers.random import solve_random
 from solvers.runner import solve_problem
+
+_EQUITY_MODES = {
+    "utilitarian": EquityMode.UTILITARIAN,
+    "max-min": EquityMode.MAX_MIN,
+    "nash": EquityMode.NASH,
+}
+_ALGORITHMS = ("cpsat", "random", "greedy")
 
 # Exit codes — exposed as module-level constants so tests and docs can refer
 # to the same values.
@@ -92,6 +101,31 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Suppress informational stderr output.",
     )
+    solve_parser.add_argument(
+        "--algorithm",
+        "-a",
+        choices=_ALGORITHMS,
+        default="cpsat",
+        help="Solver to run (default: cpsat).",
+    )
+    solve_parser.add_argument(
+        "--seed",
+        type=int,
+        default=None,
+        help="RNG seed (random baseline / CP-SAT search) for reproducibility.",
+    )
+    solve_parser.add_argument(
+        "--equity-mode",
+        choices=sorted(_EQUITY_MODES),
+        default=None,
+        help="Override the instance's equity_mode.",
+    )
+    solve_parser.add_argument(
+        "--time-budget",
+        type=float,
+        default=None,
+        help="Override the instance's time_budget_s (seconds).",
+    )
     return parser
 
 
@@ -104,7 +138,16 @@ def _render_validation_error(exc: ValidationError) -> str:
     return "\n".join(lines)
 
 
-def _cmd_solve(*, input_path: Path, out: str, quiet: bool) -> int:
+def _cmd_solve(
+    *,
+    input_path: Path,
+    out: str,
+    quiet: bool,
+    algorithm: str,
+    seed: int | None,
+    equity_mode: str | None,
+    time_budget: float | None,
+) -> int:
     """Body of the ``solve`` subcommand.
 
     Arguments are unpacked from the argparse Namespace by ``main`` to keep
@@ -122,8 +165,21 @@ def _cmd_solve(*, input_path: Path, out: str, quiet: bool) -> int:
         print(_render_validation_error(exc), file=sys.stderr)
         return EXIT_VALIDATION
 
+    overrides: dict[str, object] = {}
+    if equity_mode is not None:
+        overrides["equity_mode"] = _EQUITY_MODES[equity_mode]
+    if time_budget is not None:
+        overrides["time_budget_s"] = time_budget
+    if overrides:
+        problem = problem.model_copy(update=overrides)
+
     try:
-        output = solve_problem(problem)
+        if algorithm == "random":
+            output = solve_random(problem, seed=seed)
+        elif algorithm == "greedy":
+            output = solve_greedy(problem)
+        else:
+            output = solve_problem(problem, random_seed=seed)
     except RuntimeError as exc:
         # CP-SAT MODEL_INVALID is mapped to RuntimeError by solvers.runner.
         print(f"error: solver builder bug: {exc}", file=sys.stderr)
@@ -158,6 +214,10 @@ def main(argv: list[str] | None = None) -> int:
             input_path=args.input,
             out=args.out,
             quiet=args.quiet,
+            algorithm=args.algorithm,
+            seed=args.seed,
+            equity_mode=args.equity_mode,
+            time_budget=args.time_budget,
         )
     # ``required=True`` on the subparser makes this unreachable, but keep an
     # explicit fallback so mypy sees a return on every path.
