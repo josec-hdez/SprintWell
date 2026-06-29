@@ -180,3 +180,46 @@ def test_cli_endpoint_parity(tmp_path: Path) -> None:
     assert cli_output.message == api_output.message
     # solver_stats.wall_time_ms / conflicts / branches are timing-dependent;
     # deliberately not compared.
+
+
+def test_cli_solve_greedy_algorithm(tmp_path: Path) -> None:
+    """`--algorithm greedy` runs the greedy baseline (solver_status GREEDY)."""
+    in_path = _write_problem(tmp_path, _make_problem(effort=1, deadline=None, duration=5))
+    out_path = tmp_path / "result.json"
+
+    rc = main(
+        ["solve", "-i", str(in_path), "-o", str(out_path), "--quiet", "--algorithm", "greedy"],
+    )
+
+    assert rc == 0
+    output = SolverOutput.model_validate_json(out_path.read_text(encoding="utf-8"))
+    assert output.solver_stats.solver_status == "GREEDY"
+
+
+def test_cli_solve_accepts_seed_equity_and_time_budget(tmp_path: Path) -> None:
+    """`--algorithm random` / `--seed` / `--equity-mode` / `--time-budget` solve OK."""
+    in_path = _write_problem(tmp_path, _make_problem(effort=1, deadline=None, duration=5))
+    out_path = tmp_path / "result.json"
+
+    rc = main(
+        [
+            "solve",
+            "-i",
+            str(in_path),
+            "-o",
+            str(out_path),
+            "--quiet",
+            "--algorithm",
+            "random",
+            "--seed",
+            "7",
+            "--equity-mode",
+            "max-min",
+            "--time-budget",
+            "2",
+        ],
+    )
+
+    assert rc == 0
+    output = SolverOutput.model_validate_json(out_path.read_text(encoding="utf-8"))
+    assert output.status in (RunStatus.OPTIMAL, RunStatus.FEASIBLE)
