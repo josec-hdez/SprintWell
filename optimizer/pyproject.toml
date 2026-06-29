@@ -29,6 +29,15 @@ dev = [
   "ruff>=0.6",
   "mypy>=1.11",
 ]
+# Plotting/notebook stack for the benchmark analysis (benchmarks/notebooks).
+# Kept out of the service runtime — only needed to render the thesis figures.
+analysis = [
+  "matplotlib>=3.8,<4",
+  "pandas>=2.2,<3",
+  "nbconvert>=7",
+  "nbformat>=5",
+  "ipykernel>=6",
+]
 
 [tool.hatch.build.targets.wheel]
 only-include = ["src"]
