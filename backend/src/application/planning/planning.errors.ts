@@ -7,3 +7,11 @@ export class OptimizerUnavailableError extends Error {
     this.name = 'OptimizerUnavailableError';
   }
 }
+
+/** Raised when a planning run id is unknown (→ 404). */
+export class PlanningRunNotFoundError extends Error {
+  constructor(runId: string) {
+    super(`Planning run not found: ${runId}.`);
+    this.name = 'PlanningRunNotFoundError';
+  }
+}
