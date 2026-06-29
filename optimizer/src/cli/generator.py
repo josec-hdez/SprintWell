@@ -208,30 +208,60 @@ def generate_instance(
     skill_ids = [f"skill_{i}" for i in range(skills)]
     catalog = [Skill(id=sid, name=sid.replace("_", " ").title()) for sid in skill_ids]
 
-    user_list: list[User] = []
-    for i in range(users):
+    # Skills are drawn per user first, then a redundancy pass guarantees every
+    # skill in the catalog has at least two holders (when there are enough
+    # users). Without this, a skill held by a single user becomes a hard serial
+    # bottleneck: every task requiring it must queue on that one person, and a
+    # blackout or tight deadline on them renders the whole instance infeasible.
+    user_skill_ids: list[list[str]] = []
+    for _ in range(users):
         n_sk = rng.randint(0, min(len(skill_ids), 4))
-        chosen = rng.sample(skill_ids, n_sk) if skill_ids else []
-        user_list.append(
-            User(
-                id=f"u{i}",
-                name=f"User {i}",
-                skills=[UserSkill(skill_id=sid, level=rng.randint(1, 5)) for sid in chosen],
-            )
+        user_skill_ids.append(rng.sample(skill_ids, n_sk) if skill_ids else [])
+
+    min_holders = min(2, users)
+    for sid in skill_ids:
+        non_holders = [idx for idx, sks in enumerate(user_skill_ids) if sid not in sks]
+        holders = users - len(non_holders)
+        while holders < min_holders and non_holders:
+            pick = rng.choice(non_holders)
+            user_skill_ids[pick].append(sid)
+            non_holders.remove(pick)
+            holders += 1
+
+    user_list = [
+        User(
+            id=f"u{i}",
+            name=f"User {i}",
+            skills=[UserSkill(skill_id=sid, level=rng.randint(1, 5)) for sid in user_skill_ids[i]],
         )
+        for i in range(users)
+    ]
 
     task_list: list[Task] = []
     for j in range(tasks):
         effort = rng.randint(1, min(3, days))
-        n_req = rng.randint(0, min(len(skill_ids), 2))
-        deadline = rng.randint(effort - 1, days - 1) if rng.random() < 0.3 else None
+        # Required skills come from one randomly chosen user's own skill set, so
+        # at least that user can perform the task. Sampling freely from the
+        # global catalog routinely yields skill pairs no single user holds,
+        # which makes the task — and the whole instance — infeasible.
+        capable = user_skill_ids[rng.randrange(users)] if skill_ids else []
+        n_req = rng.randint(0, min(len(capable), 2))
+        required_skills = rng.sample(capable, n_req) if capable else []
         depends_on = [f"t{rng.randint(0, j - 1)}"] if j > 0 and rng.random() < 0.2 else []
+        # Deadlines land in the back half of the sprint with slack above the
+        # task's own effort, so each is satisfiable in isolation and leaves the
+        # scheduler room. Dependent tasks get none — a predecessor chain plus a
+        # tight due date is the classic infeasibility trap.
+        if not depends_on and rng.random() < 0.3:
+            deadline = rng.randint(min(days - 1, effort + days // 2), days - 1)
+        else:
+            deadline = None
         task_list.append(
             Task(
                 id=f"t{j}",
                 name=f"Task {j}",
                 effort_days=effort,
-                required_skills=rng.sample(skill_ids, n_req) if skill_ids else [],
+                required_skills=required_skills,
                 category=rng.choice(categories),
                 domain=rng.choice(_DOMAINS),
                 deadline_day=deadline,
