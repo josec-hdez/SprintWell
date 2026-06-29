@@ -1,0 +1,746 @@
+{
+  "sprint": {
+    "id": "cs-sprint",
+    "name": "Apollo — Sprint 14",
+    "start_date": "2026-05-04",
+    "duration_days": 15
+  },
+  "users": [
+    {
+      "id": "ana",
+      "name": "Ana Restrepo",
+      "skills": [
+        {
+          "skill_id": "backend",
+          "level": 5
+        },
+        {
+          "skill_id": "security",
+          "level": 4
+        },
+        {
+          "skill_id": "data",
+          "level": 3
+        }
+      ]
+    },
+    {
+      "id": "beto",
+      "name": "Beto Salas",
+      "skills": [
+        {
+          "skill_id": "frontend",
+          "level": 5
+        },
+        {
+          "skill_id": "design",
+          "level": 3
+        }
+      ]
+    },
+    {
+      "id": "carla",
+      "name": "Carla Méndez",
+      "skills": [
+        {
+          "skill_id": "mobile",
+          "level": 5
+        },
+        {
+          "skill_id": "frontend",
+          "level": 3
+        },
+        {
+          "skill_id": "design",
+          "level": 3
+        }
+      ]
+    },
+    {
+      "id": "diego",
+      "name": "Diego Fuentes",
+      "skills": [
+        {
+          "skill_id": "devops",
+          "level": 5
+        },
+        {
+          "skill_id": "security",
+          "level": 4
+        },
+        {
+          "skill_id": "backend",
+          "level": 3
+        }
+      ]
+    },
+    {
+      "id": "elena",
+      "name": "Elena Park",
+      "skills": [
+        {
+          "skill_id": "qa",
+          "level": 5
+        },
+        {
+          "skill_id": "backend",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "faruk",
+      "name": "Faruk Aydın",
+      "skills": [
+        {
+          "skill_id": "data",
+          "level": 5
+        },
+        {
+          "skill_id": "backend",
+          "level": 3
+        },
+        {
+          "skill_id": "frontend",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "gabi",
+      "name": "Gabi Torres",
+      "skills": [
+        {
+          "skill_id": "design",
+          "level": 5
+        },
+        {
+          "skill_id": "frontend",
+          "level": 3
+        }
+      ]
+    },
+    {
+      "id": "hugo",
+      "name": "Hugo Lima",
+      "skills": [
+        {
+          "skill_id": "frontend",
+          "level": 3
+        },
+        {
+          "skill_id": "backend",
+          "level": 2
+        }
+      ]
+    },
+    {
+      "id": "ines",
+      "name": "Inés Ferrer",
+      "skills": [
+        {
+          "skill_id": "security",
+          "level": 5
+        },
+        {
+          "skill_id": "devops",
+          "level": 4
+        }
+      ]
+    },
+    {
+      "id": "jon",
+      "name": "Jon Okafor",
+      "skills": [
+        {
+          "skill_id": "backend",
+          "level": 4
+        },
+        {
+          "skill_id": "data",
+          "level": 3
+        },
+        {
+          "skill_id": "qa",
+          "level": 3
+        }
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "api-auth",
+      "name": "OAuth login API",
+      "effort_days": 3,
+      "required_skills": [
+        "backend",
+        "security"
+      ],
+      "category": "feature",
+      "domain": "auth",
+      "deadline_day": 8,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "ui-auth",
+      "name": "Login screen",
+      "effort_days": 2,
+      "required_skills": [
+        "frontend"
+      ],
+      "category": "feature",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [
+        "api-auth"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "mobile-auth",
+      "name": "Mobile login flow",
+      "effort_days": 2,
+      "required_skills": [
+        "mobile"
+      ],
+      "category": "feature",
+      "domain": "mobile",
+      "deadline_day": null,
+      "depends_on": [
+        "api-auth"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "api-billing",
+      "name": "Billing charge API",
+      "effort_days": 3,
+      "required_skills": [
+        "backend"
+      ],
+      "category": "feature",
+      "domain": "billing",
+      "deadline_day": 10,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "ui-billing",
+      "name": "Billing dashboard",
+      "effort_days": 3,
+      "required_skills": [
+        "frontend"
+      ],
+      "category": "feature",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [
+        "api-billing"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "billing-bug",
+      "name": "Fix double-charge bug",
+      "effort_days": 2,
+      "required_skills": [
+        "backend"
+      ],
+      "category": "bug",
+      "domain": "billing",
+      "deadline_day": 5,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "payments-api",
+      "name": "Payments webhook",
+      "effort_days": 2,
+      "required_skills": [
+        "backend",
+        "security"
+      ],
+      "category": "feature",
+      "domain": "payments",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "payments-recon",
+      "name": "Reconciliation job",
+      "effort_days": 2,
+      "required_skills": [
+        "data",
+        "backend"
+      ],
+      "category": "feature",
+      "domain": "payments",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "data-pipeline",
+      "name": "Events ETL pipeline",
+      "effort_days": 3,
+      "required_skills": [
+        "data"
+      ],
+      "category": "feature",
+      "domain": "data",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "data-dashboard",
+      "name": "Analytics dashboard",
+      "effort_days": 2,
+      "required_skills": [
+        "data",
+        "frontend"
+      ],
+      "category": "feature",
+      "domain": "data",
+      "deadline_day": null,
+      "depends_on": [
+        "data-pipeline"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "infra-k8s",
+      "name": "Migrate to k8s",
+      "effort_days": 3,
+      "required_skills": [
+        "devops"
+      ],
+      "category": "infra",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "infra-ci",
+      "name": "Speed up CI",
+      "effort_days": 2,
+      "required_skills": [
+        "devops"
+      ],
+      "category": "infra",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "infra-secrets",
+      "name": "Secrets rotation",
+      "effort_days": 2,
+      "required_skills": [
+        "devops",
+        "security"
+      ],
+      "category": "infra",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "sre-alerts",
+      "name": "Tune alerting rules",
+      "effort_days": 2,
+      "required_skills": [
+        "devops"
+      ],
+      "category": "sre",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "sre-runbook",
+      "name": "On-call runbook",
+      "effort_days": 1,
+      "required_skills": [
+        "devops"
+      ],
+      "category": "on_call",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "sec-audit",
+      "name": "Security audit",
+      "effort_days": 3,
+      "required_skills": [
+        "security"
+      ],
+      "category": "research",
+      "domain": "auth",
+      "deadline_day": 12,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "sec-pentest",
+      "name": "Pen-test fixes",
+      "effort_days": 2,
+      "required_skills": [
+        "security",
+        "backend"
+      ],
+      "category": "bug",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [
+        "sec-audit"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "qa-regression",
+      "name": "Regression suite",
+      "effort_days": 3,
+      "required_skills": [
+        "qa"
+      ],
+      "category": "bug",
+      "domain": "billing",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "qa-e2e",
+      "name": "E2E test harness",
+      "effort_days": 2,
+      "required_skills": [
+        "qa",
+        "backend"
+      ],
+      "category": "bug",
+      "domain": "payments",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "design-system",
+      "name": "Design system v2",
+      "effort_days": 3,
+      "required_skills": [
+        "design"
+      ],
+      "category": "feature",
+      "domain": "mobile",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "design-mobile",
+      "name": "Mobile UI polish",
+      "effort_days": 2,
+      "required_skills": [
+        "design",
+        "mobile"
+      ],
+      "category": "feature",
+      "domain": "mobile",
+      "deadline_day": null,
+      "depends_on": [
+        "design-system"
+      ],
+      "status": "TODO"
+    },
+    {
+      "id": "docs-api",
+      "name": "API reference docs",
+      "effort_days": 1,
+      "required_skills": [
+        "backend"
+      ],
+      "category": "docs",
+      "domain": "auth",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "docs-onboard",
+      "name": "Onboarding guide",
+      "effort_days": 1,
+      "required_skills": [],
+      "category": "docs",
+      "domain": "infra",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    },
+    {
+      "id": "research-ml",
+      "name": "ML ranking spike",
+      "effort_days": 2,
+      "required_skills": [
+        "data"
+      ],
+      "category": "research",
+      "domain": "data",
+      "deadline_day": null,
+      "depends_on": [],
+      "status": "TODO"
+    }
+  ],
+  "skills": [
+    {
+      "id": "backend",
+      "name": "Backend"
+    },
+    {
+      "id": "frontend",
+      "name": "Frontend"
+    },
+    {
+      "id": "mobile",
+      "name": "Mobile"
+    },
+    {
+      "id": "devops",
+      "name": "Devops"
+    },
+    {
+      "id": "qa",
+      "name": "Qa"
+    },
+    {
+      "id": "design",
+      "name": "Design"
+    },
+    {
+      "id": "data",
+      "name": "Data"
+    },
+    {
+      "id": "security",
+      "name": "Security"
+    }
+  ],
+  "rules": [
+    {
+      "id": "ana-pc",
+      "owner_id": "ana",
+      "weight": 40,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_CATEGORY",
+      "params": {
+        "category": "feature"
+      }
+    },
+    {
+      "id": "ana-mt",
+      "owner_id": "ana",
+      "weight": 50,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "MAX_TASKS_PER_SPRINT",
+      "params": {
+        "max_tasks": 4
+      }
+    },
+    {
+      "id": "beto-pd",
+      "owner_id": "beto",
+      "weight": 45,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_DOMAIN",
+      "params": {
+        "domain": "billing"
+      }
+    },
+    {
+      "id": "beto-aw",
+      "owner_id": "beto",
+      "weight": 30,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "AVOID_WEEKDAY",
+      "params": {
+        "weekday": "friday"
+      }
+    },
+    {
+      "id": "carla-ps",
+      "owner_id": "carla",
+      "weight": 50,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_SKILL",
+      "params": {
+        "skill_id": "mobile"
+      }
+    },
+    {
+      "id": "carla-fp",
+      "owner_id": "carla",
+      "weight": 35,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "FOCUS_PREFERENCE",
+      "params": {}
+    },
+    {
+      "id": "diego-pc",
+      "owner_id": "diego",
+      "weight": 50,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_CATEGORY",
+      "params": {
+        "category": "infra"
+      }
+    },
+    {
+      "id": "diego-bd",
+      "owner_id": "diego",
+      "weight": 0,
+      "is_hard": true,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "BLACKOUT_DATE",
+      "params": {
+        "dates": [
+          "2026-05-12"
+        ]
+      }
+    },
+    {
+      "id": "elena-pc",
+      "owner_id": "elena",
+      "weight": 55,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_CATEGORY",
+      "params": {
+        "category": "bug"
+      }
+    },
+    {
+      "id": "elena-mt",
+      "owner_id": "elena",
+      "weight": 40,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "MAX_TASKS_PER_SPRINT",
+      "params": {
+        "max_tasks": 5
+      }
+    },
+    {
+      "id": "faruk-pd",
+      "owner_id": "faruk",
+      "weight": 50,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_DOMAIN",
+      "params": {
+        "domain": "data"
+      }
+    },
+    {
+      "id": "gabi-ps",
+      "owner_id": "gabi",
+      "weight": 50,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_SKILL",
+      "params": {
+        "skill_id": "design"
+      }
+    },
+    {
+      "id": "hugo-ls",
+      "owner_id": "hugo",
+      "weight": 45,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "LEARN_SKILL",
+      "params": {
+        "skill_id": "devops",
+        "min_tasks": 2
+      }
+    },
+    {
+      "id": "ines-pc",
+      "owner_id": "ines",
+      "weight": 45,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_CATEGORY",
+      "params": {
+        "category": "sre"
+      }
+    },
+    {
+      "id": "ines-cd",
+      "owner_id": "ines",
+      "weight": 30,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "COOLDOWN_AFTER",
+      "params": {
+        "after_category": "on_call",
+        "rest_days": 1
+      }
+    },
+    {
+      "id": "jon-pw",
+      "owner_id": "jon",
+      "weight": 35,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "PREFER_WEEKDAY",
+      "params": {
+        "weekday": "monday"
+      }
+    },
+    {
+      "id": "jon-ac",
+      "owner_id": "jon",
+      "weight": 30,
+      "is_hard": false,
+      "enabled": true,
+      "schema_version": 1,
+      "type": "AVOID_CATEGORY",
+      "params": {
+        "category": "docs"
+      }
+    }
+  ],
+  "equity_mode": "UTILITARIAN",
+  "time_budget_s": 20.0
+}
