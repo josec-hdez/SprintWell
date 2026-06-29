@@ -63,6 +63,49 @@ def test_skill_free_instance_is_valid() -> None:
     assert all(t.required_skills == [] for t in instance.tasks)
 
 
+def test_every_task_has_a_capable_user() -> None:
+    """Required skills are sampled from a real user, so each task is coverable."""
+    instance = generate_instance(
+        users=10, tasks=80, days=24, skills=8, rule_density=0.6, conflict_density=0.1, seed=202
+    )
+    user_skills = [{s.skill_id for s in u.skills} for u in instance.users]
+    for task in instance.tasks:
+        required = set(task.required_skills)
+        assert any(required <= owned for owned in user_skills), task.id
+
+
+def test_every_skill_has_at_least_two_holders() -> None:
+    """The redundancy pass removes single-person skill bottlenecks."""
+    instance = generate_instance(
+        users=10, tasks=80, days=24, skills=8, rule_density=0.6, conflict_density=0.1, seed=202
+    )
+    for skill in instance.skills:
+        holders = sum(1 for u in instance.users if any(s.skill_id == skill.id for s in u.skills))
+        assert holders >= 2, skill.id
+
+
+def test_dependent_tasks_have_no_deadline() -> None:
+    """A predecessor chain plus a tight due date is the classic infeasibility trap."""
+    instance = generate_instance(
+        users=10, tasks=80, days=24, skills=8, rule_density=0.6, conflict_density=0.1, seed=202
+    )
+    for task in instance.tasks:
+        if task.depends_on:
+            assert task.deadline_day is None, task.id
+
+
+def test_generated_instance_is_feasible() -> None:
+    """Regression: the generator must not emit instances the solver proves INFEASIBLE."""
+    from models import RunStatus
+    from solvers.runner import solve_problem
+
+    instance = generate_instance(
+        users=5, tasks=30, days=18, skills=4, rule_density=0.6, conflict_density=0.1, seed=101
+    )
+    output = solve_problem(instance.model_copy(update={"time_budget_s": 5.0}))
+    assert output.status != RunStatus.INFEASIBLE
+
+
 def test_cli_writes_valid_json_to_stdout(capsys: pytest.CaptureFixture[str]) -> None:
     """``sprintwell-gen ... --out -`` emits a valid ProblemInput to stdout."""
     code = main(
