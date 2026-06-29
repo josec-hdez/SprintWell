@@ -17,6 +17,10 @@ import {
   TaskOwnershipError,
 } from '../../application/sprint/sprint.errors.js';
 import {
+  OptimizerUnavailableError,
+  PlanningRunNotFoundError,
+} from '../../application/planning/planning.errors.js';
+import {
   RuleAuthorizationError,
   RuleConflictError,
   RuleNotFoundError,
@@ -44,6 +48,8 @@ interface HttpResponse {
   RuleAuthorizationError,
   RuleConflictError,
   RuleNotFoundError,
+  OptimizerUnavailableError,
+  PlanningRunNotFoundError,
 )
 export class ApplicationExceptionFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost): void {
@@ -67,6 +73,9 @@ export class ApplicationExceptionFilter implements ExceptionFilter {
     }
     if (exception instanceof TaskOwnershipError || exception instanceof RuleAuthorizationError) {
       return HttpStatus.FORBIDDEN;
+    }
+    if (exception instanceof OptimizerUnavailableError) {
+      return HttpStatus.SERVICE_UNAVAILABLE;
     }
     return HttpStatus.NOT_FOUND;
   }
