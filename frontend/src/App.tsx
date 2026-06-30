@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 
 import { AppLayout } from '@/layouts/AppLayout';
+import { Login } from '@/pages/Login';
 import { Home } from '@/routes/Home';
 // Side-effect import: registers the bearer-token middleware on the API client.
 import '@/stores/auth.store';
@@ -9,7 +10,10 @@ import '@/stores/auth.store';
 export const router = createBrowserRouter([
   {
     element: <AppLayout />,
-    children: [{ index: true, element: <Home /> }],
+    children: [
+      { index: true, element: <Home /> },
+      { path: 'login', element: <Login /> },
+    ],
   },
 ]);
 
