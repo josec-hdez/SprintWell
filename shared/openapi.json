@@ -1,6 +1,37 @@
 {
   "openapi": "3.0.0",
   "paths": {
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_loginUser",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "public: auth"
+        ]
+      }
+    },
     "/health": {
       "get": {
         "operationId": "HealthController_check",
@@ -474,6 +505,38 @@
         "type": "http"
       }
     },
-    "schemas": {}
+    "schemas": {
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "admin@sprintwell.dev"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 1,
+            "example": "correct horse battery staple"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "LoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "description": "Signed JWT for the Authorization: Bearer header."
+          }
+        },
+        "required": [
+          "accessToken"
+        ]
+      }
+    }
   }
 }
