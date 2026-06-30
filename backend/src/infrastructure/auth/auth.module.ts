@@ -1,11 +1,11 @@
 // Identity/auth composition (issue #45).
 //
 // Binds the domain ports to their concrete adapters and wires the JWT signer,
-// exposing the login / change-password use cases. Not yet imported by the root
-// module — the auth HTTP controllers (issue #69) will import it; until then it
-// stays out of the DB-free e2e boot.
+// exposing the login / change-password use cases. Marked @Global so the public
+// AuthController (issue #67) can inject LoginUseCase without its presentation
+// module importing infrastructure (§14.1). Imported by the composition root.
 
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 
 import { ChangePasswordUseCase } from '../../application/identity/change-password.use-case.js';
@@ -21,6 +21,7 @@ import { JwtTokenIssuer } from './jwt-token-issuer.js';
 // Dev fallback only; production must supply JWT_SECRET via the environment.
 const JWT_SECRET = process.env.JWT_SECRET ?? 'dev-only-secret-change-me';
 
+@Global()
 @Module({
   imports: [
     PrismaModule,
