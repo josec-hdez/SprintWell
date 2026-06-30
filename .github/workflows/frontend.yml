@@ -5,11 +5,13 @@ on:
     branches: [main]
     paths:
       - 'frontend/**'
+      - 'shared/**'
       - '.github/workflows/frontend.yml'
   push:
     branches: [main]
     paths:
       - 'frontend/**'
+      - 'shared/**'
       - '.github/workflows/frontend.yml'
 
 concurrency:
@@ -61,6 +63,15 @@ jobs:
       - name: Lint
         if: steps.detect.outputs.has-tooling == 'true'
         run: npm run lint --if-present
+
+      - name: API client up to date
+        if: steps.detect.outputs.has-tooling == 'true'
+        run: |
+          npm run generate:api
+          if ! git diff --exit-code src/api/generated; then
+            echo "::error::Generated API client is stale. Run 'npm run generate:api' and commit the result."
+            exit 1
+          fi
 
       - name: Test
         if: steps.detect.outputs.has-tooling == 'true'
