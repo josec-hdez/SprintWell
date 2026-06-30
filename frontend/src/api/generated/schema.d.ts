@@ -415,6 +415,24 @@ export interface components {
             /** @example Python */
             name: string;
         };
+        TaskResponseDto: {
+            id: string;
+            name: string;
+            effortDays: number;
+            category: string;
+            domain: string;
+            deadlineDay: number | null;
+            requiredSkills: string[];
+            dependsOn: string[];
+            status: string;
+        };
+        SprintResponseDto: {
+            id: string;
+            name: string;
+            startDate: string;
+            durationDays: number;
+            tasks: components["schemas"]["TaskResponseDto"][];
+        };
         CreateSprintDto: {
             /** @example Sprint 12 */
             name: string;
@@ -703,7 +721,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["SprintResponseDto"][];
                 };
             };
         };
@@ -724,7 +742,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["SprintResponseDto"];
                 };
             };
         };
