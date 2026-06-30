@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { writeFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app.module.js';
@@ -11,15 +11,17 @@ import { createOpenApiDocument } from './openapi.config.js';
  * frontend can generate its typed client from it. The app is created but never
  * listens, and `PrismaService` connects lazily, so this runs without a database.
  *
- * Run via `npm run openapi:export`. CI re-runs it and fails on drift, keeping
- * the committed spec in lockstep with the controllers.
+ * Runs from the compiled output (`nest build && node dist/openapi-export.js`)
+ * rather than via ts-node/tsx: the @nestjs/swagger compiler plugin only applies
+ * through `nest build`, and it is what auto-derives request/response schemas
+ * from the DTO classes. CI re-runs the script and fails on drift.
  */
 async function main(): Promise<void> {
   const app = await NestFactory.create(AppModule, { logger: false });
   const document = createOpenApiDocument(app);
   await app.close();
 
-  const target = fileURLToPath(new URL('../../shared/openapi.json', import.meta.url));
+  const target = join(__dirname, '../../shared/openapi.json');
   writeFileSync(target, `${JSON.stringify(document, null, 2)}\n`, 'utf8');
   console.log(`Wrote OpenAPI spec to ${target}`);
 }
