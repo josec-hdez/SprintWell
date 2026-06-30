@@ -69,3 +69,12 @@ jobs:
       - name: Test (e2e)
         if: steps.detect.outputs.has-tooling == 'true'
         run: npm run test:e2e --if-present -- --passWithNoTests
+
+      - name: OpenAPI spec up to date
+        if: steps.detect.outputs.has-tooling == 'true'
+        run: |
+          npm run openapi:export
+          if ! git -C "$GITHUB_WORKSPACE" diff --exit-code shared/openapi.json; then
+            echo "::error::shared/openapi.json is stale. Run 'npm run openapi:export' and commit the result."
+            exit 1
+          fi
