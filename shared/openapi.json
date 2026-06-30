@@ -1,0 +1,479 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "HealthController_check",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/admin/members": {
+      "post": {
+        "operationId": "MembersController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: members"
+        ]
+      },
+      "get": {
+        "operationId": "MembersController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: members"
+        ]
+      }
+    },
+    "/admin/members/{id}": {
+      "delete": {
+        "operationId": "MembersController_remove",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: members"
+        ]
+      }
+    },
+    "/admin/members/{id}/skills": {
+      "post": {
+        "operationId": "MembersController_assign",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: members"
+        ]
+      }
+    },
+    "/admin/skills": {
+      "post": {
+        "operationId": "SkillsController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: skills"
+        ]
+      },
+      "get": {
+        "operationId": "SkillsController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: skills"
+        ]
+      }
+    },
+    "/admin/skills/{id}": {
+      "delete": {
+        "operationId": "SkillsController_remove",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: skills"
+        ]
+      }
+    },
+    "/sprints": {
+      "get": {
+        "operationId": "SprintPublicController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "public: sprints"
+        ]
+      }
+    },
+    "/sprints/{id}": {
+      "get": {
+        "operationId": "SprintPublicController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "public: sprints"
+        ]
+      }
+    },
+    "/admin/sprints": {
+      "post": {
+        "operationId": "SprintAdminController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: sprints"
+        ]
+      }
+    },
+    "/admin/sprints/{id}": {
+      "delete": {
+        "operationId": "SprintAdminController_remove",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: sprints"
+        ]
+      }
+    },
+    "/admin/sprints/{id}/tasks": {
+      "post": {
+        "operationId": "SprintAdminController_addSprintTask",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: sprints"
+        ]
+      }
+    },
+    "/admin/sprints/{id}/tasks/{taskId}": {
+      "delete": {
+        "operationId": "SprintAdminController_removeSprintTask",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: sprints"
+        ]
+      }
+    },
+    "/admin/sprints/{id}/tasks/{taskId}/status": {
+      "patch": {
+        "operationId": "SprintAdminController_changeStatus",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: sprints"
+        ]
+      }
+    },
+    "/tasks/{id}/status": {
+      "patch": {
+        "operationId": "TaskStatusController_changeStatus",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "member: tasks"
+        ]
+      }
+    },
+    "/me/rules": {
+      "get": {
+        "operationId": "MemberRulesController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "member: rules"
+        ]
+      }
+    },
+    "/me/rules/conflicts": {
+      "get": {
+        "operationId": "MemberRulesController_conflicts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "member: rules"
+        ]
+      }
+    },
+    "/me/rules/{ruleId}": {
+      "put": {
+        "operationId": "MemberRulesController_upsert",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "member: rules"
+        ]
+      },
+      "delete": {
+        "operationId": "MemberRulesController_remove",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "member: rules"
+        ]
+      }
+    },
+    "/admin/members/{ownerId}/rules/{ruleId}": {
+      "put": {
+        "operationId": "AdminRulesController_upsert",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: rules"
+        ]
+      },
+      "delete": {
+        "operationId": "AdminRulesController_remove",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: rules"
+        ]
+      }
+    },
+    "/members/{ownerId}/rules": {
+      "get": {
+        "operationId": "PublicRulesController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "public: rules"
+        ]
+      }
+    },
+    "/admin/sprints/{sprintId}/planning-runs": {
+      "post": {
+        "operationId": "PlanningAdminController_launch",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "admin: planning"
+        ]
+      }
+    },
+    "/planning-runs/{id}": {
+      "get": {
+        "operationId": "PlanningPublicController_get",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "public: planning"
+        ]
+      }
+    },
+    "/sprints/{sprintId}/planning-runs": {
+      "get": {
+        "operationId": "PlanningPublicController_listForSprint",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "public: planning"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "SprintWell API",
+    "description": "Sprint planning backend — admin, member and public endpoints.",
+    "version": "0.1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {}
+  }
+}
