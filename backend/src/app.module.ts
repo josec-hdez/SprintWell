@@ -1,5 +1,6 @@
 import { Module, ValidationPipe } from '@nestjs/common';
 import { APP_FILTER, APP_PIPE } from '@nestjs/core';
+import { AuthModule } from './infrastructure/auth/auth.module.js';
 import { PlanningInfrastructureModule } from './infrastructure/config/planning.module.js';
 import { RulesInfrastructureModule } from './infrastructure/config/rules.module.js';
 import { SprintInfrastructureModule } from './infrastructure/config/sprint.module.js';
@@ -8,6 +9,7 @@ import { TeamInfrastructureModule } from './infrastructure/config/team.module.js
 import { ApplicationExceptionFilter } from './presentation/filters/application-exception.filter.js';
 import { SprintAdminModule } from './presentation/http/admin/sprint/sprint.module.js';
 import { TeamAdminModule } from './presentation/http/admin/team/team-admin.module.js';
+import { AuthHttpModule } from './presentation/http/public/auth.module.js';
 import { MemberTaskModule } from './presentation/http/member/task-status.module.js';
 import { PlanningHttpModule } from './presentation/http/planning.module.js';
 import { RulesHttpModule } from './presentation/http/rules.module.js';
@@ -36,6 +38,8 @@ import { SprintPublicModule } from './presentation/http/public/sprint.module.js'
  */
 @Module({
   imports: [
+    AuthModule,
+    AuthHttpModule,
     SystemHealthInfrastructureModule,
     HealthModule,
     TeamInfrastructureModule,

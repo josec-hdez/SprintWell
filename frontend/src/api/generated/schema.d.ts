@@ -4,6 +4,22 @@
  */
 
 export interface paths {
+    "/auth/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AuthController_loginUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -359,7 +375,21 @@ export interface paths {
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: never;
+    schemas: {
+        LoginDto: {
+            /**
+             * Format: email
+             * @example admin@sprintwell.dev
+             */
+            email: string;
+            /** @example correct horse battery staple */
+            password: string;
+        };
+        LoginResponseDto: {
+            /** @description Signed JWT for the Authorization: Bearer header. */
+            accessToken: string;
+        };
+    };
     responses: never;
     parameters: never;
     requestBodies: never;
@@ -368,6 +398,29 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    AuthController_loginUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoginResponseDto"];
+                };
+            };
+        };
+    };
     HealthController_check: {
         parameters: {
             query?: never;
