@@ -1,28 +1,28 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
-import type { ReactElement } from 'react';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 
-import { SessionProvider } from '@/auth/session';
 import type { SessionUser } from '@/auth/session';
 import { Header } from '@/components/Header';
+import { useAuthStore } from '@/stores/auth.store';
 
-function renderHeader(initialUser: SessionUser | null): void {
+function renderHeader(user: SessionUser | null): void {
+  useAuthStore.setState({ user, token: user === null ? null : 'test-token' });
   const router = createMemoryRouter([{ path: '/', element: <Header /> }], {
     initialEntries: ['/'],
   });
-  const ui: ReactElement = (
-    <SessionProvider initialUser={initialUser}>
-      <RouterProvider router={router} />
-    </SessionProvider>
-  );
-  render(ui);
+  render(<RouterProvider router={router} />);
 }
 
 const member: SessionUser = { id: 'u1', name: 'Alice', role: 'member' };
 const admin: SessionUser = { id: 'u2', name: 'Bob', role: 'admin' };
 
 describe('Header', () => {
+  beforeEach(() => {
+    useAuthStore.setState({ user: null, token: null });
+    localStorage.clear();
+  });
+
   it('shows a Login action when anonymous and no user menu', () => {
     renderHeader(null);
     expect(screen.getByRole('link', { name: /login/i })).toBeInTheDocument();
