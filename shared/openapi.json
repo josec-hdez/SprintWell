@@ -278,7 +278,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/SprintResponseDto"
                   }
                 }
               }
@@ -309,7 +309,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/SprintResponseDto"
                 }
               }
             }
@@ -1006,6 +1006,86 @@
         },
         "required": [
           "name"
+        ]
+      },
+      "TaskResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "effortDays": {
+            "type": "number"
+          },
+          "category": {
+            "type": "string"
+          },
+          "domain": {
+            "type": "string"
+          },
+          "deadlineDay": {
+            "type": "number",
+            "nullable": true
+          },
+          "requiredSkills": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dependsOn": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "effortDays",
+          "category",
+          "domain",
+          "deadlineDay",
+          "requiredSkills",
+          "dependsOn",
+          "status"
+        ]
+      },
+      "SprintResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string"
+          },
+          "durationDays": {
+            "type": "number"
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TaskResponseDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "startDate",
+          "durationDays",
+          "tasks"
         ]
       },
       "CreateSprintDto": {
