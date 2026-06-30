@@ -389,6 +389,112 @@ export interface components {
             /** @description Signed JWT for the Authorization: Bearer header. */
             accessToken: string;
         };
+        CreateMemberDto: {
+            /**
+             * Format: email
+             * @example alice@example.com
+             */
+            email: string;
+            /** @example Alice */
+            name: string;
+            /**
+             * @example MEMBER
+             * @enum {string}
+             */
+            role: "MEMBER" | "ADMIN";
+            /** @example changeme123 */
+            initialPassword: string;
+        };
+        AssignSkillDto: {
+            /** @example skill-uuid */
+            skillId: string;
+            /** @example 3 */
+            level: number;
+        };
+        CreateSkillDto: {
+            /** @example Python */
+            name: string;
+        };
+        CreateSprintDto: {
+            /** @example Sprint 12 */
+            name: string;
+            /**
+             * @description ISO date (YYYY-MM-DD).
+             * @example 2026-05-04
+             */
+            startDate: string;
+            /** @example 10 */
+            durationDays: number;
+        };
+        AddTaskDto: {
+            /** @example Implement login */
+            name: string;
+            /** @example 2 */
+            effortDays: number;
+            /**
+             * @example FEATURE
+             * @enum {string}
+             */
+            category: "FEATURE" | "BUG" | "INFRA" | "SRE" | "ON_CALL" | "DOCS" | "RESEARCH";
+            /** @example auth */
+            domain: string;
+            /** @example 4 */
+            deadlineDay?: number;
+            /**
+             * @example [
+             *       "skill-1"
+             *     ]
+             */
+            requiredSkills?: string[];
+            /**
+             * @example [
+             *       "task-1"
+             *     ]
+             */
+            dependsOn?: string[];
+        };
+        ChangeTaskStatusDto: {
+            /**
+             * @example IN_PROGRESS
+             * @enum {string}
+             */
+            status: "TODO" | "IN_PROGRESS" | "DONE" | "BLOCKED";
+        };
+        UpsertRuleDto: {
+            /**
+             * @example PREFER_CATEGORY
+             * @enum {string}
+             */
+            type: "PREFER_SKILL" | "AVOID_SKILL" | "PREFER_CATEGORY" | "AVOID_CATEGORY" | "PREFER_DOMAIN" | "PREFER_WEEKDAY" | "AVOID_WEEKDAY" | "BLACKOUT_DATE" | "MAX_TASKS_PER_SPRINT" | "FOCUS_PREFERENCE" | "COOLDOWN_AFTER" | "LEARN_SKILL";
+            /**
+             * @example {
+             *       "category": "feature"
+             *     }
+             */
+            params: {
+                [key: string]: unknown;
+            };
+            /** @example 30 */
+            weight: number;
+            /** @example false */
+            isHard: boolean;
+            /** @example true */
+            enabled?: boolean;
+        };
+        LaunchPlanningDto: {
+            /**
+             * @example CPSAT
+             * @enum {string}
+             */
+            algorithm: "CPSAT" | "RANDOM" | "GREEDY";
+            /**
+             * @example UTILITARIAN
+             * @enum {string}
+             */
+            equityMode: "UTILITARIAN" | "MAX_MIN" | "NASH";
+            /** @example 30 */
+            timeBudgetSeconds?: number;
+        };
     };
     responses: never;
     parameters: never;
@@ -451,7 +557,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>[];
+                };
             };
         };
     };
@@ -462,13 +570,19 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateMemberDto"];
+            };
+        };
         responses: {
             201: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>;
+                };
             };
         };
     };
@@ -476,7 +590,9 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                id: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -493,10 +609,16 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                id: string;
+            };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignSkillDto"];
+            };
+        };
         responses: {
             204: {
                 headers: {
@@ -519,7 +641,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>[];
+                };
             };
         };
     };
@@ -530,13 +654,19 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSkillDto"];
+            };
+        };
         responses: {
             201: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>;
+                };
             };
         };
     };
@@ -544,7 +674,9 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                id: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -570,7 +702,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>[];
+                };
             };
         };
     };
@@ -578,7 +712,9 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                id: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -587,7 +723,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>;
+                };
             };
         };
     };
@@ -598,13 +736,19 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateSprintDto"];
+            };
+        };
         responses: {
             201: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>;
+                };
             };
         };
     };
@@ -612,7 +756,9 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                id: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -629,16 +775,24 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                id: string;
+            };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddTaskDto"];
+            };
+        };
         responses: {
             201: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>;
+                };
             };
         };
     };
@@ -646,7 +800,10 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                id: string;
+                taskId: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -663,10 +820,17 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                id: string;
+                taskId: string;
+            };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangeTaskStatusDto"];
+            };
+        };
         responses: {
             204: {
                 headers: {
@@ -680,10 +844,16 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                id: string;
+            };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ChangeTaskStatusDto"];
+            };
+        };
         responses: {
             204: {
                 headers: {
@@ -706,7 +876,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>[];
+                };
             };
         };
     };
@@ -723,7 +895,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>[];
+                };
             };
         };
     };
@@ -731,10 +905,16 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                ruleId: string;
+            };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertRuleDto"];
+            };
+        };
         responses: {
             204: {
                 headers: {
@@ -748,7 +928,9 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                ruleId: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -765,10 +947,17 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                ownerId: string;
+                ruleId: string;
+            };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertRuleDto"];
+            };
+        };
         responses: {
             204: {
                 headers: {
@@ -782,7 +971,10 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                ownerId: string;
+                ruleId: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -799,7 +991,9 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                ownerId: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -808,7 +1002,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>[];
+                };
             };
         };
     };
@@ -816,16 +1012,24 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                sprintId: string;
+            };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LaunchPlanningDto"];
+            };
+        };
         responses: {
             201: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>;
+                };
             };
         };
     };
@@ -833,7 +1037,9 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                id: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -842,7 +1048,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>;
+                };
             };
         };
     };
@@ -850,7 +1058,9 @@ export interface operations {
         parameters: {
             query?: never;
             header?: never;
-            path?: never;
+            path: {
+                sprintId: string;
+            };
             cookie?: never;
         };
         requestBody?: never;
@@ -859,7 +1069,9 @@ export interface operations {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": Record<string, never>[];
+                };
             };
         };
     };

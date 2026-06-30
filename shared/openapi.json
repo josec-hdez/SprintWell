@@ -50,9 +50,26 @@
       "post": {
         "operationId": "MembersController_create",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMemberDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -69,7 +86,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -85,7 +112,16 @@
     "/admin/members/{id}": {
       "delete": {
         "operationId": "MembersController_remove",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "204": {
             "description": ""
@@ -104,7 +140,26 @@
     "/admin/members/{id}/skills": {
       "post": {
         "operationId": "MembersController_assign",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignSkillDto"
+              }
+            }
+          }
+        },
         "responses": {
           "204": {
             "description": ""
@@ -124,9 +179,26 @@
       "post": {
         "operationId": "SkillsController_create",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSkillDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -143,7 +215,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -159,7 +241,16 @@
     "/admin/skills/{id}": {
       "delete": {
         "operationId": "SkillsController_remove",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "204": {
             "description": ""
@@ -181,7 +272,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -192,10 +293,26 @@
     "/sprints/{id}": {
       "get": {
         "operationId": "SprintPublicController_get",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -207,9 +324,26 @@
       "post": {
         "operationId": "SprintAdminController_create",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSprintDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -225,7 +359,16 @@
     "/admin/sprints/{id}": {
       "delete": {
         "operationId": "SprintAdminController_remove",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "204": {
             "description": ""
@@ -244,10 +387,36 @@
     "/admin/sprints/{id}/tasks": {
       "post": {
         "operationId": "SprintAdminController_addSprintTask",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddTaskDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -263,7 +432,24 @@
     "/admin/sprints/{id}/tasks/{taskId}": {
       "delete": {
         "operationId": "SprintAdminController_removeSprintTask",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "taskId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "204": {
             "description": ""
@@ -282,7 +468,34 @@
     "/admin/sprints/{id}/tasks/{taskId}/status": {
       "patch": {
         "operationId": "SprintAdminController_changeStatus",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "taskId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeTaskStatusDto"
+              }
+            }
+          }
+        },
         "responses": {
           "204": {
             "description": ""
@@ -301,7 +514,26 @@
     "/tasks/{id}/status": {
       "patch": {
         "operationId": "TaskStatusController_changeStatus",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangeTaskStatusDto"
+              }
+            }
+          }
+        },
         "responses": {
           "204": {
             "description": ""
@@ -323,7 +555,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -342,7 +584,17 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -358,7 +610,26 @@
     "/me/rules/{ruleId}": {
       "put": {
         "operationId": "MemberRulesController_upsert",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "ruleId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertRuleDto"
+              }
+            }
+          }
+        },
         "responses": {
           "204": {
             "description": ""
@@ -375,7 +646,16 @@
       },
       "delete": {
         "operationId": "MemberRulesController_remove",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "ruleId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "204": {
             "description": ""
@@ -394,7 +674,34 @@
     "/admin/members/{ownerId}/rules/{ruleId}": {
       "put": {
         "operationId": "AdminRulesController_upsert",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "ownerId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ruleId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertRuleDto"
+              }
+            }
+          }
+        },
         "responses": {
           "204": {
             "description": ""
@@ -411,7 +718,24 @@
       },
       "delete": {
         "operationId": "AdminRulesController_remove",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "ownerId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ruleId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "204": {
             "description": ""
@@ -430,10 +754,29 @@
     "/members/{ownerId}/rules": {
       "get": {
         "operationId": "PublicRulesController_list",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "ownerId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -444,10 +787,36 @@
     "/admin/sprints/{sprintId}/planning-runs": {
       "post": {
         "operationId": "PlanningAdminController_launch",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "sprintId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LaunchPlanningDto"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -463,10 +832,26 @@
     "/planning-runs/{id}": {
       "get": {
         "operationId": "PlanningPublicController_get",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -477,10 +862,29 @@
     "/sprints/{sprintId}/planning-runs": {
       "get": {
         "operationId": "PlanningPublicController_listForSprint",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "sprintId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -535,6 +939,261 @@
         },
         "required": [
           "accessToken"
+        ]
+      },
+      "CreateMemberDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "alice@example.com"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "example": "Alice"
+          },
+          "role": {
+            "enum": [
+              "MEMBER",
+              "ADMIN"
+            ],
+            "type": "string",
+            "example": "MEMBER"
+          },
+          "initialPassword": {
+            "type": "string",
+            "minLength": 8,
+            "example": "changeme123"
+          }
+        },
+        "required": [
+          "email",
+          "name",
+          "role",
+          "initialPassword"
+        ]
+      },
+      "AssignSkillDto": {
+        "type": "object",
+        "properties": {
+          "skillId": {
+            "type": "string",
+            "minLength": 1,
+            "example": "skill-uuid"
+          },
+          "level": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 5,
+            "example": 3
+          }
+        },
+        "required": [
+          "skillId",
+          "level"
+        ]
+      },
+      "CreateSkillDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "example": "Python"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "CreateSprintDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "example": "Sprint 12"
+          },
+          "startDate": {
+            "type": "string",
+            "example": "2026-05-04",
+            "description": "ISO date (YYYY-MM-DD)."
+          },
+          "durationDays": {
+            "type": "number",
+            "minimum": 1,
+            "example": 10
+          }
+        },
+        "required": [
+          "name",
+          "startDate",
+          "durationDays"
+        ]
+      },
+      "AddTaskDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "example": "Implement login"
+          },
+          "effortDays": {
+            "type": "number",
+            "minimum": 1,
+            "example": 2
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "FEATURE",
+              "BUG",
+              "INFRA",
+              "SRE",
+              "ON_CALL",
+              "DOCS",
+              "RESEARCH"
+            ],
+            "example": "FEATURE"
+          },
+          "domain": {
+            "type": "string",
+            "minLength": 1,
+            "example": "auth"
+          },
+          "deadlineDay": {
+            "type": "number",
+            "minimum": 0,
+            "example": 4
+          },
+          "requiredSkills": {
+            "example": [
+              "skill-1"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "dependsOn": {
+            "example": [
+              "task-1"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "effortDays",
+          "category",
+          "domain"
+        ]
+      },
+      "ChangeTaskStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "enum": [
+              "TODO",
+              "IN_PROGRESS",
+              "DONE",
+              "BLOCKED"
+            ],
+            "type": "string",
+            "example": "IN_PROGRESS"
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "UpsertRuleDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "PREFER_SKILL",
+              "AVOID_SKILL",
+              "PREFER_CATEGORY",
+              "AVOID_CATEGORY",
+              "PREFER_DOMAIN",
+              "PREFER_WEEKDAY",
+              "AVOID_WEEKDAY",
+              "BLACKOUT_DATE",
+              "MAX_TASKS_PER_SPRINT",
+              "FOCUS_PREFERENCE",
+              "COOLDOWN_AFTER",
+              "LEARN_SKILL"
+            ],
+            "example": "PREFER_CATEGORY"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": true,
+            "example": {
+              "category": "feature"
+            }
+          },
+          "weight": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "example": 30
+          },
+          "isHard": {
+            "type": "boolean",
+            "example": false
+          },
+          "enabled": {
+            "type": "boolean",
+            "example": true
+          }
+        },
+        "required": [
+          "type",
+          "params",
+          "weight",
+          "isHard"
+        ]
+      },
+      "LaunchPlanningDto": {
+        "type": "object",
+        "properties": {
+          "algorithm": {
+            "enum": [
+              "CPSAT",
+              "RANDOM",
+              "GREEDY"
+            ],
+            "type": "string",
+            "example": "CPSAT"
+          },
+          "equityMode": {
+            "enum": [
+              "UTILITARIAN",
+              "MAX_MIN",
+              "NASH"
+            ],
+            "type": "string",
+            "example": "UTILITARIAN"
+          },
+          "timeBudgetSeconds": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 300,
+            "example": 30
+          }
+        },
+        "required": [
+          "algorithm",
+          "equityMode"
         ]
       }
     }
