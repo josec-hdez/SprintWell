@@ -7,7 +7,13 @@ import globals from 'globals';
 
 export default tseslint.config(
   {
-    ignores: ['dist', 'coverage', 'node_modules', '*.tsbuildinfo'],
+    ignores: [
+      'dist',
+      'coverage',
+      'node_modules',
+      '*.tsbuildinfo',
+      'src/api/generated/**',
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -51,7 +57,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['vite.config.ts', 'vitest.config.ts'],
+    files: ['vite.config.ts', 'vitest.config.ts', 'scripts/**/*.ts'],
     languageOptions: {
       globals: {
         ...globals.node,
