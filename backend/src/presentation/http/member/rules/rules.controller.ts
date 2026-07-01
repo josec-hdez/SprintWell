@@ -11,7 +11,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { DeleteRuleUseCase } from '../../../../application/rules/delete-rule.use-case.js';
 import { ListRulesUseCase } from '../../../../application/rules/list-rules.use-case.js';
@@ -23,6 +23,7 @@ import {
   toRuleView,
 } from '../../../../application/rules/views.js';
 import { CurrentUser, type AuthenticatedUser } from '../../../decorators/current-user.decorator.js';
+import { RuleConflictResponseDto, RuleResponseDto } from '../../../dto/rules/rule-response.dto.js';
 import { UpsertRuleDto } from '../../../dto/rules/upsert-rule.dto.js';
 import { MemberGuard } from '../../../guards/member.guard.js';
 
@@ -39,12 +40,14 @@ export class MemberRulesController {
   ) {}
 
   @Get()
+  @ApiOkResponse({ type: [RuleResponseDto] })
   async list(@CurrentUser() user: AuthenticatedUser): Promise<RuleView[]> {
     const rules = await this.listRules.execute(user.userId);
     return rules.map(toRuleView);
   }
 
   @Get('conflicts')
+  @ApiOkResponse({ type: [RuleConflictResponseDto] })
   conflicts(@CurrentUser() user: AuthenticatedUser): Promise<RuleConflict[]> {
     return this.validateRuleSet.execute(user.userId);
   }
