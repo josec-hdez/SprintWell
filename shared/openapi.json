@@ -590,7 +590,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/RuleResponseDto"
                   }
                 }
               }
@@ -619,7 +619,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/RuleConflictResponseDto"
                   }
                 }
               }
@@ -1297,6 +1297,77 @@
           "effortDays",
           "startDay",
           "status"
+        ]
+      },
+      "RuleResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "params": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "weight": {
+            "type": "number"
+          },
+          "isHard": {
+            "type": "boolean"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "schemaVersion": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "ownerId",
+          "type",
+          "params",
+          "weight",
+          "isHard",
+          "enabled",
+          "schemaVersion"
+        ]
+      },
+      "RuleConflictResponseDto": {
+        "type": "object",
+        "properties": {
+          "ruleIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "target": {
+            "type": "string",
+            "enum": [
+              "skill",
+              "category",
+              "weekday"
+            ]
+          },
+          "value": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ruleIds",
+          "target",
+          "value",
+          "description"
         ]
       },
       "UpsertRuleDto": {
