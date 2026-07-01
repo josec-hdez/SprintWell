@@ -405,6 +405,12 @@ export interface components {
             /** @example changeme123 */
             initialPassword: string;
         };
+        MemberResponseDto: {
+            id: string;
+            email: string;
+            name: string;
+            role: string;
+        };
         AssignSkillDto: {
             /** @example skill-uuid */
             skillId: string;
@@ -413,6 +419,10 @@ export interface components {
         };
         CreateSkillDto: {
             /** @example Python */
+            name: string;
+        };
+        SkillResponseDto: {
+            id: string;
             name: string;
         };
         TaskResponseDto: {
@@ -576,7 +586,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["MemberResponseDto"][];
                 };
             };
         };
@@ -594,12 +604,12 @@ export interface operations {
             };
         };
         responses: {
-            201: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["MemberResponseDto"];
                 };
             };
         };
@@ -660,7 +670,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["SkillResponseDto"][];
                 };
             };
         };
@@ -678,12 +688,12 @@ export interface operations {
             };
         };
         responses: {
-            201: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["SkillResponseDto"];
                 };
             };
         };
