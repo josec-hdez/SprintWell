@@ -244,6 +244,22 @@ export interface paths {
         patch: operations["TaskStatusController_changeStatus"];
         trace?: never;
     };
+    "/me/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MyTasksController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/me/rules": {
         parameters: {
             query?: never;
@@ -487,6 +503,16 @@ export interface components {
              * @enum {string}
              */
             status: "TODO" | "IN_PROGRESS" | "DONE" | "BLOCKED";
+        };
+        MyTaskResponseDto: {
+            sprintId: string;
+            sprintName: string;
+            taskId: string;
+            taskName: string;
+            category: string;
+            effortDays: number;
+            startDay: number;
+            status: string;
         };
         UpsertRuleDto: {
             /**
@@ -888,6 +914,25 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    MyTasksController_list: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyTaskResponseDto"][];
+                };
             };
         };
     };
