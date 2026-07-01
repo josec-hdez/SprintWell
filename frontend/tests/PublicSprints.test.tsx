@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { MemoryRouter } from 'react-router';
 
 vi.mock('@/api/client', () => ({
   api: { GET: vi.fn(), use: vi.fn() },
@@ -33,7 +34,11 @@ describe('PublicSprints', () => {
 
   it('renders the sprint list once loaded', async () => {
     resolveWith([sprint('a'), sprint('b')]);
-    render(<PublicSprints />);
+    render(
+      <MemoryRouter>
+        <PublicSprints />
+      </MemoryRouter>,
+    );
 
     expect(await screen.findByText('Sprint a')).toBeInTheDocument();
     expect(screen.getByText('Sprint b')).toBeInTheDocument();
@@ -42,21 +47,33 @@ describe('PublicSprints', () => {
 
   it('shows an empty state when there are no sprints', async () => {
     resolveWith([]);
-    render(<PublicSprints />);
+    render(
+      <MemoryRouter>
+        <PublicSprints />
+      </MemoryRouter>,
+    );
 
     expect(await screen.findByText(/no sprints yet/i)).toBeInTheDocument();
   });
 
   it('shows an error state when the request fails', async () => {
     resolveWith(undefined, { message: 'boom' });
-    render(<PublicSprints />);
+    render(
+      <MemoryRouter>
+        <PublicSprints />
+      </MemoryRouter>,
+    );
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/could not load sprints/i);
   });
 
   it('pages the list with Load more', async () => {
     resolveWith(Array.from({ length: 12 }, (_, i) => sprint(String(i))));
-    render(<PublicSprints />);
+    render(
+      <MemoryRouter>
+        <PublicSprints />
+      </MemoryRouter>,
+    );
 
     expect(await screen.findByText('Sprint 0')).toBeInTheDocument();
     expect(screen.queryByText('Sprint 11')).not.toBeInTheDocument();

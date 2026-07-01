@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { ReactElement } from 'react';
+import { Link } from 'react-router';
 
 import { Button } from '@/components/ui/button';
 import { useSprintList } from '@/features/sprint/useSprintList';
@@ -63,12 +64,15 @@ export function PublicSprints(): ReactElement {
 function SprintCard({ sprint }: { sprint: Sprint }): ReactElement {
   const taskCount = sprint.tasks.length;
   return (
-    <div className="rounded-lg border bg-card p-4 shadow-sm">
+    <Link
+      to={`/sprints/${sprint.id}`}
+      className="block rounded-lg border bg-card p-4 shadow-sm transition-colors hover:bg-accent"
+    >
       <h2 className="font-medium">{sprint.name}</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         Starts {sprint.startDate} · {sprint.durationDays} days · {taskCount}{' '}
         {taskCount === 1 ? 'task' : 'tasks'}
       </p>
-    </div>
+    </Link>
   );
 }
