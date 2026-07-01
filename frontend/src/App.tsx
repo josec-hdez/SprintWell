@@ -6,6 +6,7 @@ import { AppLayout } from '@/layouts/AppLayout';
 import { Login } from '@/pages/Login';
 import { PublicSprintDetail } from '@/pages/PublicSprintDetail';
 import { PublicSprints } from '@/pages/PublicSprints';
+import { SprintsAdmin } from '@/pages/admin/SprintsAdmin';
 import { TeamAdmin } from '@/pages/admin/TeamAdmin';
 // Side-effect import: registers the bearer-token middleware on the API client.
 import '@/stores/auth.store';
@@ -22,6 +23,14 @@ export const router = createBrowserRouter([
         element: (
           <RequireAdmin>
             <TeamAdmin />
+          </RequireAdmin>
+        ),
+      },
+      {
+        path: 'admin/sprints',
+        element: (
+          <RequireAdmin>
+            <SprintsAdmin />
           </RequireAdmin>
         ),
       },

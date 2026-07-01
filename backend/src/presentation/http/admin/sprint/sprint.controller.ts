@@ -11,7 +11,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { AddTaskUseCase } from '../../../../application/sprint/add-task.use-case.js';
 import { ChangeTaskStatusUseCase } from '../../../../application/sprint/change-task-status.use-case.js';
@@ -27,6 +27,7 @@ import {
 import { AddTaskDto } from '../../../dto/sprint/add-task.dto.js';
 import { ChangeTaskStatusDto } from '../../../dto/sprint/change-task-status.dto.js';
 import { CreateSprintDto } from '../../../dto/sprint/create-sprint.dto.js';
+import { SprintResponseDto, TaskResponseDto } from '../../../dto/sprint/sprint-response.dto.js';
 import { AdminGuard } from '../../../guards/admin.guard.js';
 
 @ApiTags('admin: sprints')
@@ -43,6 +44,7 @@ export class SprintAdminController {
   ) {}
 
   @Post()
+  @ApiOkResponse({ type: SprintResponseDto })
   async create(@Body() dto: CreateSprintDto): Promise<SprintView> {
     const sprint = await this.createSprint.execute({
       name: dto.name,
@@ -59,6 +61,7 @@ export class SprintAdminController {
   }
 
   @Post(':id/tasks')
+  @ApiOkResponse({ type: TaskResponseDto })
   async addSprintTask(@Param('id') id: string, @Body() dto: AddTaskDto): Promise<TaskView> {
     const task = await this.addTask.execute({
       sprintId: id,
