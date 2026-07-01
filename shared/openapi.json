@@ -549,6 +549,35 @@
         ]
       }
     },
+    "/me/tasks": {
+      "get": {
+        "operationId": "MyTasksController_list",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MyTaskResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "member: tasks"
+        ]
+      }
+    },
     "/me/rules": {
       "get": {
         "operationId": "MemberRulesController_list",
@@ -1228,6 +1257,45 @@
           }
         },
         "required": [
+          "status"
+        ]
+      },
+      "MyTaskResponseDto": {
+        "type": "object",
+        "properties": {
+          "sprintId": {
+            "type": "string"
+          },
+          "sprintName": {
+            "type": "string"
+          },
+          "taskId": {
+            "type": "string"
+          },
+          "taskName": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "effortDays": {
+            "type": "number"
+          },
+          "startDay": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sprintId",
+          "sprintName",
+          "taskId",
+          "taskName",
+          "category",
+          "effortDays",
+          "startDay",
           "status"
         ]
       },
