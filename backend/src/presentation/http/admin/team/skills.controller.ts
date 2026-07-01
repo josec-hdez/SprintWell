@@ -11,13 +11,14 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateSkillUseCase } from '../../../../application/team/create-skill.use-case.js';
 import { DeleteSkillUseCase } from '../../../../application/team/delete-skill.use-case.js';
 import { ListSkillsUseCase } from '../../../../application/team/list-skills.use-case.js';
 import { type SkillView, toSkillView } from '../../../../application/team/views.js';
 import { CreateSkillDto } from '../../../dto/team/create-skill.dto.js';
+import { SkillResponseDto } from '../../../dto/team/team-response.dto.js';
 import { AdminGuard } from '../../../guards/admin.guard.js';
 
 @ApiTags('admin: skills')
@@ -32,11 +33,13 @@ export class SkillsController {
   ) {}
 
   @Post()
+  @ApiOkResponse({ type: SkillResponseDto })
   async create(@Body() dto: CreateSkillDto): Promise<SkillView> {
     return toSkillView(await this.createSkill.execute(dto.name));
   }
 
   @Get()
+  @ApiOkResponse({ type: [SkillResponseDto] })
   async list(): Promise<SkillView[]> {
     const skills = await this.listSkills.execute();
     return skills.map(toSkillView);

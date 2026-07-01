@@ -11,7 +11,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { AssignSkillUseCase } from '../../../../application/team/assign-skill.use-case.js';
 import { CreateMemberUseCase } from '../../../../application/team/create-member.use-case.js';
@@ -20,6 +20,7 @@ import { ListMembersUseCase } from '../../../../application/team/list-members.us
 import { type MemberView, toMemberView } from '../../../../application/team/views.js';
 import { AssignSkillDto } from '../../../dto/team/assign-skill.dto.js';
 import { CreateMemberDto } from '../../../dto/team/create-member.dto.js';
+import { MemberResponseDto } from '../../../dto/team/team-response.dto.js';
 import { AdminGuard } from '../../../guards/admin.guard.js';
 
 @ApiTags('admin: members')
@@ -35,6 +36,7 @@ export class MembersController {
   ) {}
 
   @Post()
+  @ApiOkResponse({ type: MemberResponseDto })
   async create(@Body() dto: CreateMemberDto): Promise<MemberView> {
     const user = await this.createMember.execute({
       email: dto.email,
@@ -46,6 +48,7 @@ export class MembersController {
   }
 
   @Get()
+  @ApiOkResponse({ type: [MemberResponseDto] })
   async list(): Promise<MemberView[]> {
     const users = await this.listMembers.execute();
     return users.map(toMemberView);
