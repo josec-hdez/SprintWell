@@ -514,6 +514,25 @@ export interface components {
             startDay: number;
             status: string;
         };
+        RuleResponseDto: {
+            id: string;
+            ownerId: string;
+            type: string;
+            params: {
+                [key: string]: unknown;
+            };
+            weight: number;
+            isHard: boolean;
+            enabled: boolean;
+            schemaVersion: number;
+        };
+        RuleConflictResponseDto: {
+            ruleIds: string[];
+            /** @enum {string} */
+            target: "skill" | "category" | "weekday";
+            value: string;
+            description: string;
+        };
         UpsertRuleDto: {
             /**
              * @example PREFER_CATEGORY
@@ -950,7 +969,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["RuleResponseDto"][];
                 };
             };
         };
@@ -969,7 +988,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["RuleConflictResponseDto"][];
                 };
             };
         };
