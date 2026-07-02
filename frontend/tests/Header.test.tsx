@@ -55,6 +55,6 @@ describe('Header', () => {
   it('renders admin navigation destinations', () => {
     renderHeader(admin);
     expect(screen.getByRole('link', { name: /^team$/i })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /planning/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /compare/i })).toBeInTheDocument();
   });
 });

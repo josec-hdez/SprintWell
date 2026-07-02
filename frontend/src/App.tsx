@@ -5,6 +5,7 @@ import { RequireAdmin } from '@/components/RequireAdmin';
 import { RequireAuth } from '@/components/RequireAuth';
 import { AppLayout } from '@/layouts/AppLayout';
 import { Login } from '@/pages/Login';
+import { CompareRuns } from '@/pages/CompareRuns';
 import { PlanningRunView } from '@/pages/PlanningRunView';
 import { PublicSprintDetail } from '@/pages/PublicSprintDetail';
 import { PublicSprints } from '@/pages/PublicSprints';
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
       { index: true, element: <PublicSprints /> },
       { path: 'sprints/:id', element: <PublicSprintDetail /> },
       { path: 'planning-runs/:id', element: <PlanningRunView /> },
+      { path: 'compare', element: <CompareRuns /> },
       { path: 'login', element: <Login /> },
       {
         path: 'my-tasks',
