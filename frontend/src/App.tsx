@@ -9,6 +9,7 @@ import { PublicSprintDetail } from '@/pages/PublicSprintDetail';
 import { PublicSprints } from '@/pages/PublicSprints';
 import { MyTasks } from '@/pages/member/MyTasks';
 import { RuleEditor } from '@/pages/member/RuleEditor';
+import { MemberRulesAdmin } from '@/pages/admin/MemberRulesAdmin';
 import { SprintsAdmin } from '@/pages/admin/SprintsAdmin';
 import { TeamAdmin } from '@/pages/admin/TeamAdmin';
 // Side-effect import: registers the bearer-token middleware on the API client.
@@ -50,6 +51,14 @@ export const router = createBrowserRouter([
         element: (
           <RequireAdmin>
             <SprintsAdmin />
+          </RequireAdmin>
+        ),
+      },
+      {
+        path: 'admin/member-rules',
+        element: (
+          <RequireAdmin>
+            <MemberRulesAdmin />
           </RequireAdmin>
         ),
       },
