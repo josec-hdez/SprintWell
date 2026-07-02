@@ -26,6 +26,7 @@ const NAV_BY_ROLE: Record<Role, NavItem[]> = {
     { label: 'Sprints', to: '/' },
     { label: 'Team', to: '/admin/team' },
     { label: 'Backlog', to: '/admin/sprints' },
+    { label: 'Rules', to: '/admin/member-rules' },
     { label: 'Planning', to: '/admin/planning' },
   ],
 };
