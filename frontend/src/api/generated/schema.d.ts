@@ -568,6 +568,28 @@ export interface components {
             /** @example 30 */
             timeBudgetSeconds?: number;
         };
+        AssignmentResponseDto: {
+            taskId: string;
+            userId: string;
+            startDay: number;
+        };
+        PerUserHappinessResponseDto: {
+            userId: string;
+            happiness: number;
+        };
+        PlanningRunResponseDto: {
+            id: string;
+            sprintId: string;
+            strategy: string;
+            equityMode: string;
+            status: string;
+            objectiveValue: number | null;
+            assignments: components["schemas"]["AssignmentResponseDto"][];
+            perUserHappiness: components["schemas"]["PerUserHappinessResponseDto"][];
+            averageHappiness: number;
+            minHappiness: number;
+            createdAt: string;
+        };
     };
     responses: never;
     parameters: never;
@@ -1115,12 +1137,12 @@ export interface operations {
             };
         };
         responses: {
-            201: {
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["PlanningRunResponseDto"];
                 };
             };
         };
@@ -1141,7 +1163,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>;
+                    "application/json": components["schemas"]["PlanningRunResponseDto"];
                 };
             };
         };
@@ -1162,7 +1184,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": Record<string, never>[];
+                    "application/json": components["schemas"]["PlanningRunResponseDto"][];
                 };
             };
         };
