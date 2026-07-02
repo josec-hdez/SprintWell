@@ -2,6 +2,7 @@ import type { ReactElement } from 'react';
 import { useParams } from 'react-router';
 
 import { GanttView } from '@/features/planning/GanttView';
+import { WellbeingDashboard } from '@/features/planning/WellbeingDashboard';
 import { usePlanningRun } from '@/features/planning/usePlanningRun';
 
 /**
@@ -41,10 +42,17 @@ export function PlanningRunView(): ReactElement {
         <p role="alert" className="text-destructive">
           No feasible plan exists for this sprint with the current tasks and rules.
         </p>
-      ) : sprint === null ? (
-        <p className="text-muted-foreground">Assignments are ready, but the sprint could not be loaded.</p>
       ) : (
-        <GanttView run={run} sprint={sprint} />
+        <>
+          {sprint === null ? (
+            <p className="text-muted-foreground">
+              Assignments are ready, but the sprint could not be loaded.
+            </p>
+          ) : (
+            <GanttView run={run} sprint={sprint} />
+          )}
+          <WellbeingDashboard run={run} />
+        </>
       )}
     </section>
   );
