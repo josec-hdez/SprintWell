@@ -69,7 +69,8 @@ describe('PlanningRunView', () => {
 
     expect(await screen.findByRole('heading', { name: /planning run/i })).toBeInTheDocument();
     expect(screen.getByText('OAuth login')).toBeInTheDocument();
-    expect(screen.getByText('ana')).toBeInTheDocument();
+    // "ana" appears in both the Gantt row and the wellbeing bar.
+    expect(screen.getAllByText('ana').length).toBeGreaterThan(0);
   });
 
   it('shows an INFEASIBLE message', async () => {
