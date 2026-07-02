@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import type { ReactElement } from 'react';
 import { useParams } from 'react-router';
 
+import { ExplainabilityPanel } from '@/features/planning/ExplainabilityPanel';
 import { GanttView } from '@/features/planning/GanttView';
 import { WellbeingDashboard } from '@/features/planning/WellbeingDashboard';
 import { usePlanningRun } from '@/features/planning/usePlanningRun';
+import { cn } from '@/lib/utils';
 
 /**
  * Planning-run view (issue #81): the run's metadata plus a Gantt of its
@@ -12,6 +15,7 @@ import { usePlanningRun } from '@/features/planning/usePlanningRun';
 export function PlanningRunView(): ReactElement {
   const { id = '' } = useParams();
   const { run, sprint, isLoading, error } = usePlanningRun(id);
+  const [explainUser, setExplainUser] = useState('');
 
   if (isLoading) {
     return <p className="text-muted-foreground">Loading plan…</p>;
@@ -52,6 +56,37 @@ export function PlanningRunView(): ReactElement {
             <GanttView run={run} sprint={sprint} />
           )}
           <WellbeingDashboard run={run} />
+
+          <div className="space-y-3">
+            <h2 className="text-xl font-semibold">Explain a member</h2>
+            <select
+              aria-label="Explain member"
+              value={explainUser}
+              onChange={(event) => {
+                setExplainUser(event.target.value);
+              }}
+              className={cn(
+                'h-9 max-w-xs rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm',
+                'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring',
+              )}
+            >
+              <option value="">Select a member…</option>
+              {run.perUserHappiness.map((entry) => (
+                <option key={entry.userId} value={entry.userId}>
+                  {entry.userId}
+                </option>
+              ))}
+            </select>
+            {explainUser !== '' && (
+              <ExplainabilityPanel
+                key={explainUser}
+                userId={explainUser}
+                happiness={
+                  run.perUserHappiness.find((entry) => entry.userId === explainUser)?.happiness ?? 0
+                }
+              />
+            )}
+          </div>
         </>
       )}
     </section>
