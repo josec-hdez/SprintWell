@@ -837,12 +837,12 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/PlanningRunResponseDto"
                 }
               }
             }
@@ -877,7 +877,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/PlanningRunResponseDto"
                 }
               }
             }
@@ -909,7 +909,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/PlanningRunResponseDto"
                   }
                 }
               }
@@ -1451,6 +1451,98 @@
         "required": [
           "algorithm",
           "equityMode"
+        ]
+      },
+      "AssignmentResponseDto": {
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "startDay": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "taskId",
+          "userId",
+          "startDay"
+        ]
+      },
+      "PerUserHappinessResponseDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string"
+          },
+          "happiness": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "userId",
+          "happiness"
+        ]
+      },
+      "PlanningRunResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "sprintId": {
+            "type": "string"
+          },
+          "strategy": {
+            "type": "string"
+          },
+          "equityMode": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "objectiveValue": {
+            "type": "number",
+            "nullable": true
+          },
+          "assignments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssignmentResponseDto"
+            }
+          },
+          "perUserHappiness": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PerUserHappinessResponseDto"
+            }
+          },
+          "averageHappiness": {
+            "type": "number"
+          },
+          "minHappiness": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "sprintId",
+          "strategy",
+          "equityMode",
+          "status",
+          "objectiveValue",
+          "assignments",
+          "perUserHappiness",
+          "averageHappiness",
+          "minHappiness",
+          "createdAt"
         ]
       }
     }

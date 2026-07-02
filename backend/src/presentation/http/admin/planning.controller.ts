@@ -1,11 +1,12 @@
 // Admin endpoint to launch a planning run for a sprint (issue #63).
 
 import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { LaunchPlanningUseCase } from '../../../application/planning/launch-planning.use-case.js';
 import { type PlanningRunView, toPlanningRunView } from '../../../application/planning/views.js';
 import { LaunchPlanningDto } from '../../dto/planning/launch-planning.dto.js';
+import { PlanningRunResponseDto } from '../../dto/planning/planning-run-response.dto.js';
 import { AdminGuard } from '../../guards/admin.guard.js';
 
 @ApiTags('admin: planning')
@@ -16,6 +17,7 @@ export class PlanningAdminController {
   constructor(private readonly launchPlanning: LaunchPlanningUseCase) {}
 
   @Post()
+  @ApiOkResponse({ type: PlanningRunResponseDto })
   async launch(
     @Param('sprintId') sprintId: string,
     @Body() dto: LaunchPlanningDto,
