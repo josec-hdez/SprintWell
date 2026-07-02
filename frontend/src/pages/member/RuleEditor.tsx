@@ -12,8 +12,14 @@ import { useRules } from '@/features/rules/useRules';
  * Member rule editor (issue #77, brief §6). Live weight-budget bar, an add-rule
  * modal with per-type fields, and a banner for backend-detected conflicts.
  */
-export function RuleEditor(): ReactElement {
-  const { rules, conflicts, isLoading, error, upsert, remove } = useRules();
+export function RuleEditor({
+  ownerId,
+  title = 'My rules',
+}: {
+  ownerId?: string;
+  title?: string;
+} = {}): ReactElement {
+  const { rules, conflicts, isLoading, error, upsert, remove } = useRules(ownerId);
   const [showModal, setShowModal] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
 
@@ -47,7 +53,7 @@ export function RuleEditor(): ReactElement {
   return (
     <section className="space-y-5">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">My rules</h1>
+        <h1 className="text-2xl font-semibold">{title}</h1>
         <Button
           size="sm"
           onClick={() => {
