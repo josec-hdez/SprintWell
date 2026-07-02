@@ -5,6 +5,7 @@ import { RequireAdmin } from '@/components/RequireAdmin';
 import { RequireAuth } from '@/components/RequireAuth';
 import { AppLayout } from '@/layouts/AppLayout';
 import { Login } from '@/pages/Login';
+import { PlanningRunView } from '@/pages/PlanningRunView';
 import { PublicSprintDetail } from '@/pages/PublicSprintDetail';
 import { PublicSprints } from '@/pages/PublicSprints';
 import { MyTasks } from '@/pages/member/MyTasks';
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <PublicSprints /> },
       { path: 'sprints/:id', element: <PublicSprintDetail /> },
+      { path: 'planning-runs/:id', element: <PlanningRunView /> },
       { path: 'login', element: <Login /> },
       {
         path: 'my-tasks',
