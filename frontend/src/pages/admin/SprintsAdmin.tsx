@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { FormEvent, ReactElement } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { LaunchPlanningModal } from '@/features/planning/LaunchPlanningModal';
 import type { NewSprint } from '@/features/sprint/admin/useSprintsAdmin';
 import { useSprintsAdmin } from '@/features/sprint/admin/useSprintsAdmin';
 import { useSkills } from '@/features/team/useSkills';
@@ -18,6 +19,7 @@ export function SprintsAdmin(): ReactElement {
   const { sprints, isLoading, error, createSprint, deleteSprint } = useSprintsAdmin();
   const { skills } = useSkills();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [planningSprint, setPlanningSprint] = useState<{ id: string; name: string } | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
 
   const run = (op: Promise<void>): void => {
@@ -56,6 +58,14 @@ export function SprintsAdmin(): ReactElement {
               </div>
               <div className="flex gap-2">
                 <Button
+                  size="sm"
+                  onClick={() => {
+                    setPlanningSprint({ id: sprint.id, name: sprint.name });
+                  }}
+                >
+                  Plan
+                </Button>
+                <Button
                   variant="outline"
                   size="sm"
                   onClick={() => {
@@ -82,6 +92,16 @@ export function SprintsAdmin(): ReactElement {
           </li>
         ))}
       </ul>
+
+      {planningSprint !== null && (
+        <LaunchPlanningModal
+          sprintId={planningSprint.id}
+          sprintName={planningSprint.name}
+          onClose={() => {
+            setPlanningSprint(null);
+          }}
+        />
+      )}
     </div>
   );
 }
