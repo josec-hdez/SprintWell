@@ -801,7 +801,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/RuleResponseDto"
                   }
                 }
               }
