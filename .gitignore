@@ -171,3 +171,9 @@ docker-compose.override.yml
 # ─── IDE / editors ───
 .idea/
 .vscode/
+
+# ─── Playwright (frontend e2e) ───
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/
+frontend/.playwright/
