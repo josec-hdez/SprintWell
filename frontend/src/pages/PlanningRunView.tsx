@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { ReactElement } from 'react';
 import { useParams } from 'react-router';
 
+import { Loading } from '@/components/ui/loading';
 import { ExplainabilityPanel } from '@/features/planning/ExplainabilityPanel';
 import { GanttView } from '@/features/planning/GanttView';
 import { WellbeingDashboard } from '@/features/planning/WellbeingDashboard';
@@ -18,7 +19,7 @@ export function PlanningRunView(): ReactElement {
   const [explainUser, setExplainUser] = useState('');
 
   if (isLoading) {
-    return <p className="text-muted-foreground">Loading plan…</p>;
+    return <Loading label="Loading plan…" />;
   }
   if (error !== null || run === null) {
     return (
