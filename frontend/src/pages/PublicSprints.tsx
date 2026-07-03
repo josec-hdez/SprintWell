@@ -3,6 +3,7 @@ import type { ReactElement } from 'react';
 import { Link } from 'react-router';
 
 import { Button } from '@/components/ui/button';
+import { Loading } from '@/components/ui/loading';
 import { useSprintList } from '@/features/sprint/useSprintList';
 import type { Sprint } from '@/features/sprint/useSprintList';
 
@@ -21,7 +22,7 @@ export function PublicSprints(): ReactElement {
     <section>
       <h1 className="mb-6 text-2xl font-semibold">Sprints</h1>
 
-      {isLoading && <p className="text-muted-foreground">Loading sprints…</p>}
+      {isLoading && <Loading label="Loading sprints…" />}
 
       {error !== null && (
         <p role="alert" className="text-destructive">

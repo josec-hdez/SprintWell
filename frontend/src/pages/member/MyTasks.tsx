@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { ReactElement } from 'react';
 
+import { Loading } from '@/components/ui/loading';
 import { useChangeTaskStatus } from '@/features/sprint/useChangeTaskStatus';
 import type { TaskStatus } from '@/features/sprint/useChangeTaskStatus';
 import { useMyTasks } from '@/features/sprint/useMyTasks';
@@ -50,7 +51,7 @@ export function MyTasks(): ReactElement {
         </p>
       )}
       {error !== null && <p className="text-sm text-destructive">{error}</p>}
-      {isLoading && <p className="text-sm text-muted-foreground">Loading your tasks…</p>}
+      {isLoading && <Loading label="Loading your tasks…" />}
       {!isLoading && tasks.length === 0 && error === null && (
         <p className="text-sm text-muted-foreground">You have no assigned tasks.</p>
       )}

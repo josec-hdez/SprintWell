@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import type { FormEvent, ReactElement } from 'react';
 
+import { Play } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
+import { Loading } from '@/components/ui/loading';
 import { LaunchPlanningModal } from '@/features/planning/LaunchPlanningModal';
 import type { NewSprint } from '@/features/sprint/admin/useSprintsAdmin';
 import { useSprintsAdmin } from '@/features/sprint/admin/useSprintsAdmin';
@@ -41,7 +44,7 @@ export function SprintsAdmin(): ReactElement {
         </p>
       )}
       {error !== null && <p className="text-sm text-destructive">{error}</p>}
-      {isLoading && <p className="text-sm text-muted-foreground">Loading sprints…</p>}
+      {isLoading && <Loading label="Loading sprints…" />}
       {!isLoading && sprints.length === 0 && error === null && (
         <p className="text-sm text-muted-foreground">No sprints yet.</p>
       )}
@@ -63,6 +66,7 @@ export function SprintsAdmin(): ReactElement {
                     setPlanningSprint({ id: sprint.id, name: sprint.name });
                   }}
                 >
+                  <Play />
                   Plan
                 </Button>
                 <Button

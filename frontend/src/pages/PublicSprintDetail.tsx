@@ -1,6 +1,7 @@
 import type { ReactElement, ReactNode } from 'react';
 import { Link, useParams } from 'react-router';
 
+import { Loading } from '@/components/ui/loading';
 import { useSprintDetail } from '@/features/sprint/useSprintDetail';
 import type { Sprint } from '@/features/sprint/useSprintList';
 
@@ -16,7 +17,7 @@ export function PublicSprintDetail(): ReactElement {
   const { sprint, isLoading, error } = useSprintDetail(id);
 
   if (isLoading) {
-    return <p className="text-muted-foreground">Loading sprint…</p>;
+    return <Loading label="Loading sprint…" />;
   }
 
   if (error !== null || sprint === null) {

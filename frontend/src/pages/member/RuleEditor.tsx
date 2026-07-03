@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import type { ReactElement } from 'react';
 
+import { Plus } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
+import { Loading } from '@/components/ui/loading';
 import { BudgetBar, BUDGET_TOTAL } from '@/features/rules/BudgetBar';
 import { ConflictBanner } from '@/features/rules/ConflictBanner';
 import { RuleModal } from '@/features/rules/RuleModal';
@@ -60,6 +63,7 @@ export function RuleEditor({
             setShowModal(true);
           }}
         >
+          <Plus />
           Add rule
         </Button>
       </div>
@@ -73,7 +77,7 @@ export function RuleEditor({
         </p>
       )}
       {error !== null && <p className="text-sm text-destructive">{error}</p>}
-      {isLoading && <p className="text-sm text-muted-foreground">Loading rules…</p>}
+      {isLoading && <Loading label="Loading rules…" />}
       {!isLoading && rules.length === 0 && error === null && (
         <p className="text-sm text-muted-foreground">No rules yet. Add one to shape your sprint.</p>
       )}
