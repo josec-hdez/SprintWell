@@ -2,14 +2,14 @@
  * Prisma seed — a single example admin so a fresh database is immediately
  * usable (issue #42).
  *
- * The password is hashed with Node's built-in scrypt to avoid pulling a native
- * dependency before the auth context lands. Issue #45 standardises credential
- * hashing on argon2; until then this dev admin can be reset there. The seed is
- * idempotent (upsert by email), so re-running never duplicates the admin.
+ * The password is hashed with **argon2** — the same verifier the LoginUseCase
+ * uses (issue #45) — so the seeded admin can actually log in. `update` also sets
+ * the hash, so re-running repairs an admin created by an older (scrypt) seed.
+ * The seed is idempotent (upsert by email), so re-running never duplicates it.
  *
- * Run with: `npm run prisma:seed` (after `prisma migrate dev`).
+ * Run with: `npm run prisma:seed` (after `prisma migrate deploy`).
  */
-import { randomBytes, scryptSync } from 'node:crypto';
+import * as argon2 from 'argon2';
 
 import { PrismaClient, Role } from '@prisma/client';
 
@@ -18,20 +18,19 @@ const prisma = new PrismaClient();
 const ADMIN_EMAIL = 'admin@sprintwell.local';
 const ADMIN_DEV_PASSWORD = 'changeme';
 
-function hashPassword(password: string): string {
-  const salt = randomBytes(16).toString('hex');
-  const derived = scryptSync(password, salt, 64).toString('hex');
-  return `scrypt$${salt}$${derived}`;
+function hashPassword(password: string): Promise<string> {
+  return argon2.hash(password);
 }
 
 async function main(): Promise<void> {
+  const passwordHash = await hashPassword(ADMIN_DEV_PASSWORD);
   const admin = await prisma.user.upsert({
     where: { email: ADMIN_EMAIL },
-    update: {},
+    update: { passwordHash },
     create: {
       email: ADMIN_EMAIL,
       name: 'Admin',
-      passwordHash: hashPassword(ADMIN_DEV_PASSWORD),
+      passwordHash,
       role: Role.ADMIN,
     },
   });
