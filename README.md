@@ -1,80 +1,139 @@
 # SprintWell
 
-> Trabajo Fin de Máster: **"Planificación de sprints con asignación de tareas multiobjetivo orientada al bienestar del equipo, desarrollada mediante metodologías asistidas por IA"**.
+> **Trabajo Fin de Máster — Máster de Desarrollo con IA.**
+> Planificación de sprints con asignación de tareas multiobjetivo orientada al **bienestar del equipo**, desarrollada con metodologías asistidas por IA.
 
-**SprintWell** es un sistema web de planificación de sprints que incorpora las **preferencias individuales del trabajador** (tipo de tarea, días, dominios de interés, guardias, intención de aprender) como un objetivo de primer orden, junto a las restricciones operativas clásicas (capacidad, dependencias, deadlines, skills) y a criterios de equidad inter-empleado.
+**SprintWell** es un sistema web que planifica sprints incorporando las **preferencias individuales de cada persona** (tipo de tarea, días, dominios, guardias, intención de aprender) como un **objetivo de primer orden**, junto a las restricciones operativas clásicas (capacidad, dependencias, deadlines, skills) y a criterios de **equidad** inter-empleado seleccionables (utilitarista, max-min, Nash).
 
-El problema se formaliza como una optimización combinatoria multiobjetivo (NP-difícil, reducible al _Generalized Assignment Problem_) y se aborda con una formulación **CP-SAT**, documentando rigurosamente el uso de herramientas de IA en todas las fases del desarrollo.
+El problema se formaliza como una optimización combinatoria multiobjetivo (NP-difícil, reducible al _Generalized Assignment Problem_) y se resuelve con **CP-SAT** (OR-Tools), comparándolo contra baselines. Todo el desarrollo está documentado como bitácora de uso de IA.
 
 ---
 
-## 📌 Fuente única de verdad
+## 🔗 Enlaces de entrega
 
-El **brief técnico** es el documento maestro del proyecto: gobierna el alcance, la arquitectura y la generación de _issues_.
+| Recurso | Enlace |
+|---|---|
+| **Repositorio (público)** | https://github.com/josec-hdez/SprintWell |
+| **Despliegue** | _Local (ver [Instalación y ejecución](#-instalación-y-ejecución)). Sin despliegue público por ahora._ |
+| **Slides** | Contenido en [`docs/defense/presentation.md`](docs/defense/presentation.md) · _URL pública pendiente_ |
+| **Vídeo** | _Pendiente de grabar (guion en [`docs/defense/demo-script.md`](docs/defense/demo-script.md))_ |
 
-> **Cualquier cambio de alcance se hace PRIMERO en el brief y luego se implementa, no al revés.** Si el plan de acción y el brief chocan, **manda el brief**.
+> Los tres últimos son entregables que requieren un paso manual (desplegar, exportar las slides, grabar el vídeo). Este README se actualiza con sus URLs públicas cuando existan.
 
-| Documento | Rol | Ubicación |
+---
+
+## 🔑 Usuario y contraseña de prueba
+
+Tras ejecutar el seed (`npm run prisma:seed`, ver abajo):
+
+| Rol | Usuario | Contraseña |
 |---|---|---|
-| [`docs/sprintwell-brief.md`](docs/sprintwell-brief.md) | **Brief técnico** — qué construir (SSOT) | Repo + Obsidian `Local/TFM/SprintWell.md` |
-| [`docs/action-plan.md`](docs/action-plan.md) | **Plan de acción** — qué hacer (12 semanas en historias) | Repo + Obsidian `Local/TFM/Action Plan.md` |
-
-Ambos documentos se mantienen versionados en este repositorio y editables desde Obsidian; el repo es la copia de referencia para detectar divergencias en el control de versiones.
+| **Admin** | `admin@sprintwell.local` | `changeme` |
+| **Miembro** | `ana@sprintwell.local` (o `beto@`, `carla@`, `diego@`, `elena@`, `faruk@`, `gabi@`, `hugo@` `@sprintwell.local`) | `changeme` |
 
 ---
 
-## Objetivos
+## 🧩 Stack tecnológico
 
-1. **Dominio:** modelo formal y sistema funcional para incorporar preferencias del trabajador a la planificación de sprints, con tratamiento explícito de la equidad.
-2. **Algorítmico:** estudio de la formulación CP-SAT del problema con benchmark sintético reproducible y comparación frente a _baselines_ triviales.
-3. **Metodológico:** protocolo documentado y métricas reales sobre el uso de IA en el desarrollo de un sistema no trivial por un único desarrollador.
-
-Hipótesis falseables, aportes esperados y exclusiones de alcance: ver [§2 del brief](docs/sprintwell-brief.md#2-objetivos-del-proyecto).
-
----
-
-## Cómo navegar la documentación
-
-- **¿Qué construir?** → [`docs/sprintwell-brief.md`](docs/sprintwell-brief.md): arquitectura (§4), modelo de dominio (§5), DSL de reglas (§6), formulación matemática (§7), algoritmos (§8) y Definition of Done (§16).
-- **¿Qué hacer y cuándo?** → [`docs/action-plan.md`](docs/action-plan.md): cronograma de 12 semanas desglosado en historias de usuario, base del backlog de _issues_.
+| Servicio | Tecnologías |
+|---|---|
+| **Backend** (`backend/`) | NestJS 11 · TypeScript (DDD en 4 capas) · Prisma 6 · PostgreSQL 16 · JWT + argon2 · Jest |
+| **Optimizer** (`optimizer/`) | Python 3.11 · FastAPI · OR-Tools **CP-SAT** · Pydantic · `uv` · pytest · ruff · mypy |
+| **Frontend** (`frontend/`) | React 19 · Vite 6 · TypeScript · Tailwind v4 · shadcn/ui · React Router 7 · Zustand · cliente tipado generado desde el OpenAPI (`openapi-typescript` + `openapi-fetch`) · Vitest · Playwright |
+| **Compartido / infra** | JSON Schema (`shared/`) · Docker Compose (PostgreSQL) · GitHub Actions (CI por servicio) |
 
 ---
 
-## Estado
+## ⚙️ Instalación y ejecución
 
-Sprint 0 — Preparación. El backlog vive como _issues_ de GitHub derivados del plan de acción.
+**Prerrequisitos:** Docker (Compose v2), Node ≥ 20 + npm, Python 3.11 + [`uv`](https://docs.astral.sh/uv/). Se arrancan 4 piezas en este orden.
+
+```bash
+# 1) Base de datos (PostgreSQL 16 en Docker)
+make db-up                    # = docker compose up -d postgres
+
+# 2) Optimizer  (http://localhost:8000)
+cd optimizer
+uv sync
+uv run uvicorn src.api:app --host 0.0.0.0 --port 8000 --reload
+#    verificar:  curl http://localhost:8000/health  → {"status":"ok"}
+
+# 3) Backend  (http://localhost:3000 · Swagger en /docs)
+cd backend
+cp .env.example .env
+npm install
+npm run prisma:generate
+npm run prisma:migrate:deploy
+npm run prisma:seed           # crea admin + equipo + sprint de demo
+npm run start:dev
+
+# 4) Frontend  (http://localhost:5173)
+cd frontend
+cp .env.example .env
+npm install
+npm run dev
+```
+
+Abre **http://localhost:5173** e inicia sesión con las credenciales de arriba. El seed deja listo el sprint **"Apollo — Sprint 14"** con equipo, skills, tareas y reglas: como admin, ve a **Backlog → Plan** para lanzar una planificación.
+
+---
+
+## ✨ Funcionalidades principales
+
+**Público (sin login):**
+- Listado y detalle de sprints con su tabla de tareas.
+- Vista de una planificación: **Gantt** por persona/día, **dashboard de bienestar** (felicidad media/mín/máx + barra por persona) y **panel de explicabilidad**.
+- **Comparador** de dos planificaciones del mismo sprint (diff de métricas y de asignaciones).
+
+**Miembro:**
+- **Mis tareas** con cambio de estado (con confirmación).
+- **Editor de reglas** con DSL de 12 tipos, **presupuesto de 100 puntos en vivo** y detección de conflictos.
+
+**Admin:**
+- Gestión de **equipo** (miembros + skills con nivel) y del **backlog** (sprints y tareas con dependencias, deadlines y skills).
+- Edición de reglas de **cualquier** miembro.
+- **Lanzar planificación** eligiendo algoritmo (CP-SAT / random / greedy) y modo de equidad (utilitarista / max-min / Nash).
+
+**Motor / algoritmia:**
+- Optimizador CP-SAT con _rule compiler_ del DSL, 3 modos de equidad y 2 baselines.
+- Generador de instancias sintéticas y **benchmark reproducible** (`benchmarks/`).
+
+---
+
+## 📁 Estructura del proyecto
+
+```
+SprintWell/
+├── backend/       API NestJS (DDD: domain, application, infrastructure, presentation) + Prisma
+├── optimizer/     Microservicio Python FastAPI + OR-Tools CP-SAT (+ CLIs solve/gen)
+├── frontend/      SPA React (Vite + Tailwind + shadcn) con cliente tipado
+├── shared/        Contratos entre servicios: JSON Schema de reglas + openapi.json
+├── benchmarks/    Instancias fijas, script de benchmark, notebook de análisis, caso de estudio
+├── docs/          Brief técnico (SSOT), memoria (thesis/), caso de estudio, defensa, ADRs
+├── docker-compose.yml   PostgreSQL 16
+└── Makefile             atajos de BD (make db-up / db-down / db-reset)
+```
+
+Cada servicio tiene su propio `README.md` con detalle de tooling y comandos.
+
+---
+
+## 🧪 Tests y calidad
+
+- **Backend:** `npm test` (unit) · `npm run test:e2e` (e2e sin BD) · `eslint` con fronteras de capa (`eslint-plugin-boundaries`).
+- **Optimizer:** `uv run pytest` · `ruff` · `mypy --strict`.
+- **Frontend:** `npm run test:run` (Vitest) · `npm run test:e2e` (Playwright, flujos críticos) · `tsc` estricto · ESLint.
+- **CI:** GitHub Actions ejecuta lint + tests por servicio en cada PR; el cliente tipado y el OpenAPI se verifican regenerados (drift-check).
+
+---
+
+## 📚 Documentación
+
+- **Brief técnico (fuente única de verdad):** [`docs/sprintwell-brief.md`](docs/sprintwell-brief.md)
+- **Memoria del TFM (9 capítulos):** [`docs/thesis/chapters/`](docs/thesis/chapters/)
+- **Caso de estudio (equipo Apollo):** [`docs/case-study/`](docs/case-study/)
+- **Preparación de la defensa (slides, guion de demo, Q&A):** [`docs/defense/`](docs/defense/)
 
 ## Licencia
 
 Ver [LICENSE](LICENSE).
-
----
-
-## Getting started
-
-> This section is in English per brief §3 (code and technical docs in English; the final memoria is in Spanish).
-
-SprintWell is a monorepo with three services plus shared and documentation areas. The skeleton mirrors brief §14; per-service tooling is bootstrapped in later week-1 issues.
-
-### Repository layout
-
-| Directory | Holds | Stack |
-|---|---|---|
-| `backend/` | NestJS REST API, structured as DDD in 4 layers (`domain`, `application`, `infrastructure`, `presentation`). Layer dependency rules in brief §14.1. | NestJS + TypeScript + Prisma |
-| `frontend/` | Single-page web app: public read-only views plus member/admin flows. | React + TypeScript + Vite + Tailwind + shadcn/ui |
-| `optimizer/` | Standalone solver microservice (CP-SAT + baselines) and the synthetic dataset CLI generator. | Python 3.11 + OR-Tools + FastAPI |
-| `shared/` | Cross-service source of truth — `rule-schemas/` JSON Schema consumed by both backend and optimizer. | JSON Schema |
-| `docs/` | Technical brief (SSOT), action plan, wireframes, thesis (LaTeX), methodology log, and ADRs. | Markdown / LaTeX |
-| `benchmarks/` | Reproducible benchmark: instances, results, and analysis notebooks. | JSON / Jupyter |
-
-Each directory carries a short `README.md` describing its purpose and the rules that apply to it.
-
-### Prerequisites (planned)
-
-- Node.js (LTS) and a package manager — for `backend/` and `frontend/`.
-- Python 3.11 — for `optimizer/`.
-- Docker + Docker Compose — for PostgreSQL 16 and orchestrating the services.
-
-### Status
-
-This issue bootstraps the monorepo skeleton, the editor configuration (`.editorconfig`), and the ignore rules (`.gitignore`). Per-service manifests (`package.json`, `pyproject.toml`, `tsconfig.json`, Prisma schema, `docker-compose.yml`) and runnable code are added in subsequent week-1 issues.
