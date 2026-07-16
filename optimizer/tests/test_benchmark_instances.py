@@ -27,11 +27,21 @@ _MODES = {
 
 
 def _instance_files() -> list[Path]:
-    return sorted(_INSTANCES_DIR.glob("*.json"))
+    """The 12 scale×mode benchmark instances.
+
+    Excludes ``case-study.json`` (issue #93): the semi-realistic case study is a
+    committed instance too, but it is not part of the 4-scale × 3-mode grid.
+    """
+    return sorted(
+        path
+        for scale in _SCALES
+        for mode in _MODES
+        if (path := _INSTANCES_DIR / f"{scale}_{mode}.json").exists()
+    )
 
 
 def test_there_are_twelve_instances() -> None:
-    """4 scales × 3 modes = 12 committed instances."""
+    """4 scales × 3 modes = 12 committed grid instances (case study excluded)."""
     assert len(_instance_files()) == 12
 
 
@@ -43,6 +53,13 @@ def test_instance_validates_and_records_its_mode(scale: str, mode: str) -> None:
     assert path.exists(), f"missing benchmark instance: {path.name}"
     problem = ProblemInput.model_validate_json(path.read_text(encoding="utf-8"))
     assert problem.equity_mode == _MODES[mode]
+
+
+def test_case_study_instance_validates() -> None:
+    """The semi-realistic case study (issue #93) parses against the schema."""
+    path = _INSTANCES_DIR / "case-study.json"
+    assert path.exists(), "missing case-study.json"
+    ProblemInput.model_validate_json(path.read_text(encoding="utf-8"))
 
 
 @pytest.mark.parametrize("scale", _SCALES)
