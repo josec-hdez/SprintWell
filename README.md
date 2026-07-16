@@ -15,7 +15,7 @@ El problema se formaliza como una optimización combinatoria multiobjetivo (NP-d
 |---|---|
 | **Repositorio (público)** | https://github.com/josec-hdez/SprintWell |
 | **Despliegue** | _Local (ver [Instalación y ejecución](#-instalación-y-ejecución)). Sin despliegue público por ahora._ |
-| **Slides** | [`docs/defense/slides-v2.pdf`](docs/defense/slides-v2.pdf) (recomendada) · fuente [`slides-v2.md`](docs/defense/slides-v2.md) (Marp) · guion [`presentation.md`](docs/defense/presentation.md) · _URL pública pendiente_ |
+| **Slides** | **[Presentación (Google Drive)](https://drive.google.com/file/d/1KOJx-FMoyxw9CXwl0tP-0jR2mtXZzWtO/view)** · en el repo: [`docs/defense/slides-v2.pdf`](docs/defense/slides-v2.pdf) · fuente [`slides-v2.md`](docs/defense/slides-v2.md) (Marp) · guion [`presentation.md`](docs/defense/presentation.md) |
 | **Vídeo** | _Pendiente de grabar (guion en [`docs/defense/demo-script.md`](docs/defense/demo-script.md))_ |
 
 > Los tres últimos son entregables que requieren un paso manual (desplegar, exportar las slides, grabar el vídeo). Este README se actualiza con sus URLs públicas cuando existan.
