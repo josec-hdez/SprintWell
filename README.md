@@ -76,6 +76,21 @@ npm run dev
 
 Abre **http://localhost:5173** e inicia sesión con las credenciales de arriba. El seed deja listo el sprint **"Apollo — Sprint 14"** con equipo, skills, tareas y reglas: como admin, ve a **Backlog → Plan** para lanzar una planificación.
 
+### Opción B — todo en contenedores (un solo comando)
+
+Levanta los **cuatro servicios** (postgres + optimizer + backend + frontend) con Docker, sin instalar Node ni Python en la máquina:
+
+```bash
+docker compose -f docker-compose.full.yml up --build
+# una vez arriba, sembrar los datos de demo (una sola vez):
+docker compose -f docker-compose.full.yml exec backend \
+  node dist/infrastructure/persistence/prisma/seed.js
+```
+
+- **Frontend:** http://localhost:5173 · **API:** http://localhost:3000/docs · **Optimizer:** http://localhost:8000/health
+- El backend aplica las migraciones al arrancar; postgres conserva los datos en un volumen.
+- Este compose es también la base para desplegar en cualquier _host_ de contenedores (Railway, Render, Fly.io…). El frontend hornea `VITE_API_URL` en tiempo de build (arg de Docker): apúntalo a la URL pública del backend al desplegar.
+
 ---
 
 ## ✨ Funcionalidades principales

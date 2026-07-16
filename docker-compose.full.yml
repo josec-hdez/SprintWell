@@ -1,0 +1,64 @@
+# SprintWell — full stack in containers (postgres + optimizer + backend + frontend).
+# Brings up the whole system with one command; also the basis for any container host.
+#
+#   docker compose -f docker-compose.full.yml up --build
+#   # then seed the demo data once:
+#   docker compose -f docker-compose.full.yml exec backend node dist/infrastructure/persistence/prisma/seed.js
+#
+# Open http://localhost:5173  ·  API http://localhost:3000/docs  ·  optimizer http://localhost:8000/health
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sprintwell
+      POSTGRES_PASSWORD: sprintwell
+      POSTGRES_DB: sprintwell
+    volumes:
+      - sprintwell_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U sprintwell -d sprintwell']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  optimizer:
+    build: ./optimizer
+    restart: unless-stopped
+    ports:
+      - '8000:8000'
+
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://sprintwell:sprintwell@postgres:5432/sprintwell?schema=public
+      OPTIMIZER_URL: http://optimizer:8000
+      PORT: '3000'
+      # FRONTEND_URL unset → CORS reflects the request origin (fine for a demo).
+    ports:
+      - '3000:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      optimizer:
+        condition: service_started
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # Browser-reachable backend URL (baked into the bundle at build time).
+        VITE_API_URL: http://localhost:3000
+    restart: unless-stopped
+    ports:
+      - '5173:80'
+    depends_on:
+      backend:
+        condition: service_started
+
+volumes:
+  sprintwell_postgres_data:
+    name: sprintwell_postgres_data
