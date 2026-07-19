@@ -35,7 +35,7 @@
 
 ---
 
-## 1 · Introducción (≈0:45)
+## 1 · Introducción (~0:45)
 
 - **[ACCIÓN]** Empieza con la pantalla pública en `/` (la home, "Sprints"). No hace
   falta hacer nada aún, solo que se vea la app.
@@ -53,7 +53,7 @@
 
 ---
 
-## 2 · Vista pública sin login (≈0:40)
+## 2 · Vista pública sin login (~0:40)
 
 - **[ACCIÓN]** En `/` (nav **"Sprints"**), señala la tarjeta **"Apollo — Sprint 14"** y
   **haz clic** en ella → te lleva a `/sprints/<id>` (detalle).
@@ -69,7 +69,7 @@
 
 ---
 
-## 3 · Login como admin (≈0:30)
+## 3 · Login como admin (~0:30)
 
 - **[ACCIÓN]** Pulsa **"Login"** (barra superior derecha) → vas a `/login`.
 - **[ACCIÓN]** En el campo **"Email"** escribe `admin@sprintwell.local`; en
@@ -85,7 +85,7 @@
 
 ---
 
-## 4 · Gestión del equipo (≈0:45)
+## 4 · Gestión del equipo (~0:45)
 
 - **[ACCIÓN]** Pulsa **"Team"** en la barra (→ `/admin/team`).
 - **[DECIR]**
@@ -100,7 +100,7 @@
 
 ---
 
-## 5 · El backlog: sprint y tareas (≈0:50)
+## 5 · El backlog: sprint y tareas (~0:50)
 
 - **[ACCIÓN]** Pulsa **"Backlog"** (→ `/admin/sprints`).
 - **[DECIR]**
@@ -122,9 +122,9 @@
 
 ---
 
-## 6 · Lanzar la 1.ª planificación — Utilitarian (≈0:45)
+## 6 · Lanzar la 1.ª planificación — Utilitarian (~0:45)
 
-- **[ACCIÓN]** En la fila de Apollo, pulsa **"Plan"** (botón con icono ▶). Se abre un
+- **[ACCIÓN]** En la fila de Apollo, pulsa **"Plan"** (botón con icono de play). Se abre un
   modal titulado **`Plan "Apollo — Sprint 14"`**.
 - **[ACCIÓN]** En el selector **"Algorithm"** deja **`CPSAT`**. En **"Equity mode"**
   elige **`UTILITARIAN`**. Pulsa **"Run planning"**.
@@ -140,7 +140,7 @@
 
 ---
 
-## 7 · Lanzar la 2.ª planificación — Nash (≈0:50)
+## 7 · Lanzar la 2.ª planificación — Nash (~0:50)
 
 - **[ACCIÓN]** Vuelve al **"Backlog"** (nav superior). En Apollo, pulsa **"Plan"** otra
   vez. En el modal, **Algorithm** = `CPSAT`, **Equity mode** = **`NASH`**. Pulsa
@@ -153,7 +153,7 @@
 
 ---
 
-## 8 · Leer el resultado: Gantt + bienestar + explicabilidad (≈1:30)
+## 8 · Leer el resultado: Gantt + bienestar + explicabilidad (~1:30)
 
 Estás en `/planning-runs/<id>` (la corrida **Nash**).
 
@@ -186,7 +186,7 @@ Estás en `/planning-runs/<id>` (la corrida **Nash**).
 
 ---
 
-## 9 · Comparar los dos modos — el momento clave (≈1:15)
+## 9 · Comparar los dos modos — el momento clave (~1:15)
 
 - **[ACCIÓN]** Pulsa **"Compare"** en la barra (→ `/compare`).
 - **[ACCIÓN]** En el desplegable **"Sprint"** elige **"Apollo — Sprint 14"**. En
@@ -210,7 +210,7 @@ Estás en `/planning-runs/<id>` (la corrida **Nash**).
 
 ---
 
-## 10 · Perfil miembro: mis tareas y mis reglas (≈1:15)
+## 10 · Perfil miembro: mis tareas y mis reglas (~1:15)
 
 - **[ACCIÓN]** Cierra sesión: pulsa **tu nombre** (barra superior derecha) → **"Logout"**.
   Luego **"Login"** y entra como **`hugo@sprintwell.local`** / `changeme`.
@@ -242,7 +242,7 @@ Estás en `/planning-runs/<id>` (la corrida **Nash**).
 
 ---
 
-## 11 · Cómo está construido (≈0:45)
+## 11 · Cómo está construido (~0:45)
 
 - **[ACCIÓN]** (Opcional) Cambia a una pestaña con el **repositorio de GitHub** o el
   README, o simplemente narra sobre la app.
@@ -257,7 +257,7 @@ Estás en `/planning-runs/<id>` (la corrida **Nash**).
 
 ---
 
-## 12 · Cierre (≈0:20)
+## 12 · Cierre (~0:20)
 
 - **[DECIR]**
   > "En resumen: SprintWell mete las **preferencias y la equidad dentro del modelo**,
