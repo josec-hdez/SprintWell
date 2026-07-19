@@ -18,8 +18,9 @@
    # backend/
    npm run prisma:seed
    ```
-   Esto deja el sprint **"Apollo — Sprint 14"** (18 días, 12 tareas), 8 miembros con
-   skills y 8 reglas. Hugo tiene una regla `LEARN_SKILL devops`.
+   Esto deja el sprint **"Apollo — Sprint 14"** (15 días, 24 tareas), 10 miembros con
+   skills y 16 reglas. Es el mismo dataset del caso de estudio del capítulo 7,
+   diseñado para que **los modos de equidad den planes distintos**.
 2. **Optimizer arriba** en `:8000` (imprescindible para planificar). Comprueba
    `curl localhost:8000/health` → `{"status":"ok"}`.
 3. Abre el navegador en **`http://localhost:5173`**, ventana limpia, **zoom ~110 %**,
@@ -194,10 +195,14 @@ Estás en `/planning-runs/<id>` (la corrida **Nash**).
 - **[DECIR]**
   > "Esta es la pantalla que resume la tesis del proyecto: **comparar** dos planes del
   > mismo sprint. A la izquierda el utilitario, a la derecha el de Nash. Fijaos en el
-  > **diff de métricas** y, sobre todo, en la **felicidad por persona**: al cambiar el
-  > modo de equidad, el plan **reasigna** el trabajo. Alguien como Hugo, nuestro
-  > junior, que en utilitario quedaba en el suelo, con Nash sube porque el modelo
-  > protege al peor servido. **La equidad no es un eslogan: se ve y se mide.**"
+  > **diff de métricas**: con Nash la **felicidad media** sube y, sobre todo, sube el
+  > **mínimo** —el peor servido mejora—. Y en la **felicidad por persona** se ve que,
+  > al cambiar el modo de equidad, el plan **reasigna** el trabajo: hay quien mejora y
+  > quien cede un poco para equilibrar. Eso es la equidad: no dejar a nadie tirado.
+  > **No es un eslogan: se ve y se mide.**"
+  >
+  > _(Nota: el orden exacto de Δ por persona puede variar entre ejecuciones —el solver
+  > no fija semilla—, pero la media y el mínimo suben con Nash de forma consistente.)_
 - **[EN PANTALLA]** Título **"Compare planning runs"**; tres selectores
   (**Sprint · Run A · Run B**); la tabla de **diff de métricas globales** (con columna
   Δ), el **diff de felicidad por miembro** y la lista de **tareas reasignadas**; debajo,
