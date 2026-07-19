@@ -1,12 +1,17 @@
 /**
- * Prisma seed (issue #42) — an admin plus a ready-to-plan demo dataset so a
- * fresh database is immediately usable and plannable.
+ * Prisma seed (issue #42) — an admin plus a ready-to-plan demo dataset that
+ * makes the equity comparison compelling.
  *
- * Passwords are hashed with **argon2** — the same verifier the LoginUseCase uses
- * — so the seeded users can log in. The seed is **idempotent**: it wipes the demo
- * domain data (skills, non-admin users, sprints, rules and everything they
- * cascade) and repopulates it, then upserts the admin. Manually created data is
- * therefore reset on each run — this is a demo seed by design.
+ * The dataset mirrors the "Apollo" case study (thesis ch. 7,
+ * benchmarks/instances/case-study.json): 10 members, 24 tasks and 16 rules,
+ * designed so the three equity modes give *different* plans. In particular the
+ * junior, **Hugo**, improves under max-min / Nash versus utilitarian — the
+ * "equity matters" story the demo and video rely on.
+ *
+ * Passwords are hashed with **argon2** (the verifier LoginUseCase uses), so the
+ * seeded users can log in. The seed is **idempotent**: it wipes the demo domain
+ * data and repopulates it, then upserts the admin. Manually created data is
+ * reset on each run — this is a demo seed by design.
  *
  * Run with: `npm run prisma:seed` (after `prisma migrate deploy`).
  * Login: admin@sprintwell.local / changeme · members: <name>@sprintwell.local / changeme
@@ -20,7 +25,7 @@ const prisma = new PrismaClient();
 const ADMIN_EMAIL = 'admin@sprintwell.local';
 const DEV_PASSWORD = 'changeme';
 
-// --- Demo dataset -----------------------------------------------------------
+// --- Demo dataset (Apollo case study) --------------------------------------
 
 const SKILLS = ['backend', 'frontend', 'mobile', 'devops', 'qa', 'design', 'data', 'security'];
 const skillId = (name: string): string => `s-${name}`;
@@ -100,6 +105,23 @@ const MEMBERS: DemoMember[] = [
       ['backend', 2],
     ],
   },
+  {
+    key: 'ines',
+    name: 'Inés Ferrer',
+    skills: [
+      ['security', 5],
+      ['devops', 4],
+    ],
+  },
+  {
+    key: 'jon',
+    name: 'Jon Okafor',
+    skills: [
+      ['backend', 4],
+      ['data', 3],
+      ['qa', 3],
+    ],
+  },
 ];
 const userId = (key: string): string => `u-${key}`;
 const userEmail = (key: string): string => `${key}@sprintwell.local`;
@@ -154,6 +176,15 @@ const TASKS: DemoTask[] = [
     skills: ['backend'],
   },
   {
+    key: 'ui-billing',
+    name: 'Billing dashboard',
+    effort: 3,
+    category: 'FEATURE',
+    domain: 'billing',
+    skills: ['frontend'],
+    deps: ['api-billing'],
+  },
+  {
     key: 'billing-bug',
     name: 'Fix double-charge bug',
     effort: 2,
@@ -161,6 +192,22 @@ const TASKS: DemoTask[] = [
     domain: 'billing',
     deadline: 5,
     skills: ['backend'],
+  },
+  {
+    key: 'payments-api',
+    name: 'Payments webhook',
+    effort: 2,
+    category: 'FEATURE',
+    domain: 'payments',
+    skills: ['backend', 'security'],
+  },
+  {
+    key: 'payments-recon',
+    name: 'Reconciliation job',
+    effort: 2,
+    category: 'FEATURE',
+    domain: 'payments',
+    skills: ['data', 'backend'],
   },
   {
     key: 'data-pipeline',
@@ -188,12 +235,70 @@ const TASKS: DemoTask[] = [
     skills: ['devops'],
   },
   {
+    key: 'infra-ci',
+    name: 'Speed up CI',
+    effort: 2,
+    category: 'INFRA',
+    domain: 'infra',
+    skills: ['devops'],
+  },
+  {
+    key: 'infra-secrets',
+    name: 'Secrets rotation',
+    effort: 2,
+    category: 'INFRA',
+    domain: 'infra',
+    skills: ['devops', 'security'],
+  },
+  {
+    key: 'sre-alerts',
+    name: 'Tune alerting rules',
+    effort: 2,
+    category: 'SRE',
+    domain: 'infra',
+    skills: ['devops'],
+  },
+  {
+    key: 'sre-runbook',
+    name: 'On-call runbook',
+    effort: 1,
+    category: 'ON_CALL',
+    domain: 'infra',
+    skills: ['devops'],
+  },
+  {
+    key: 'sec-audit',
+    name: 'Security audit',
+    effort: 3,
+    category: 'RESEARCH',
+    domain: 'auth',
+    deadline: 12,
+    skills: ['security'],
+  },
+  {
+    key: 'sec-pentest',
+    name: 'Pen-test fixes',
+    effort: 2,
+    category: 'BUG',
+    domain: 'auth',
+    skills: ['security', 'backend'],
+    deps: ['sec-audit'],
+  },
+  {
     key: 'qa-regression',
     name: 'Regression suite',
     effort: 3,
     category: 'BUG',
     domain: 'billing',
     skills: ['qa'],
+  },
+  {
+    key: 'qa-e2e',
+    name: 'E2E test harness',
+    effort: 2,
+    category: 'BUG',
+    domain: 'payments',
+    skills: ['qa', 'backend'],
   },
   {
     key: 'design-system',
@@ -220,6 +325,22 @@ const TASKS: DemoTask[] = [
     domain: 'auth',
     skills: ['backend'],
   },
+  {
+    key: 'docs-onboard',
+    name: 'Onboarding guide',
+    effort: 1,
+    category: 'DOCS',
+    domain: 'infra',
+    skills: [],
+  },
+  {
+    key: 'research-ml',
+    name: 'ML ranking spike',
+    effort: 2,
+    category: 'RESEARCH',
+    domain: 'data',
+    skills: ['data'],
+  },
 ];
 const taskId = (key: string): string => `t-${key}`;
 
@@ -233,10 +354,21 @@ interface DemoRule {
 
 const RULES: DemoRule[] = [
   { owner: 'ana', type: 'PREFER_CATEGORY', params: { category: 'feature' }, weight: 40 },
+  { owner: 'ana', type: 'MAX_TASKS_PER_SPRINT', params: { max_tasks: 4 }, weight: 50 },
   { owner: 'beto', type: 'PREFER_DOMAIN', params: { domain: 'billing' }, weight: 45 },
+  { owner: 'beto', type: 'AVOID_WEEKDAY', params: { weekday: 'friday' }, weight: 30 },
   { owner: 'carla', type: 'PREFER_SKILL', params: { skill_id: skillId('mobile') }, weight: 50 },
+  { owner: 'carla', type: 'FOCUS_PREFERENCE', params: {}, weight: 35 },
   { owner: 'diego', type: 'PREFER_CATEGORY', params: { category: 'infra' }, weight: 50 },
+  {
+    owner: 'diego',
+    type: 'BLACKOUT_DATE',
+    params: { dates: ['2026-05-12'] },
+    weight: 0,
+    isHard: true,
+  },
   { owner: 'elena', type: 'PREFER_CATEGORY', params: { category: 'bug' }, weight: 55 },
+  { owner: 'elena', type: 'MAX_TASKS_PER_SPRINT', params: { max_tasks: 5 }, weight: 40 },
   { owner: 'faruk', type: 'PREFER_DOMAIN', params: { domain: 'data' }, weight: 50 },
   { owner: 'gabi', type: 'PREFER_SKILL', params: { skill_id: skillId('design') }, weight: 50 },
   {
@@ -245,13 +377,22 @@ const RULES: DemoRule[] = [
     params: { skill_id: skillId('devops'), min_tasks: 2 },
     weight: 45,
   },
+  { owner: 'ines', type: 'PREFER_CATEGORY', params: { category: 'sre' }, weight: 45 },
+  {
+    owner: 'ines',
+    type: 'COOLDOWN_AFTER',
+    params: { after_category: 'on_call', rest_days: 1 },
+    weight: 30,
+  },
+  { owner: 'jon', type: 'PREFER_WEEKDAY', params: { weekday: 'monday' }, weight: 35 },
+  { owner: 'jon', type: 'AVOID_CATEGORY', params: { category: 'docs' }, weight: 30 },
 ];
 
 // --- Seed -------------------------------------------------------------------
 
 async function resetDemoData(): Promise<void> {
   // Order respects foreign keys (children first). Sprint/User deletes cascade
-  // to tasks, planning runs, assignments, user-skills.
+  // to tasks, planning runs, assignments and user-skills.
   await prisma.rule.deleteMany();
   await prisma.assignment.deleteMany();
   await prisma.planningRun.deleteMany();
@@ -275,9 +416,7 @@ async function main(): Promise<void> {
   });
 
   // Skills.
-  await prisma.skill.createMany({
-    data: SKILLS.map((name) => ({ id: skillId(name), name })),
-  });
+  await prisma.skill.createMany({ data: SKILLS.map((name) => ({ id: skillId(name), name })) });
 
   // Members + their skill levels.
   for (const member of MEMBERS) {
@@ -301,7 +440,7 @@ async function main(): Promise<void> {
       id: SPRINT_ID,
       name: 'Apollo — Sprint 14',
       startDate: new Date('2026-05-04'),
-      durationDays: 18,
+      durationDays: 15,
     },
   });
 
