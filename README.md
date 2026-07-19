@@ -16,9 +16,9 @@ El problema se formaliza como una optimización combinatoria multiobjetivo (NP-d
 | **Repositorio (público)** | https://github.com/josec-hdez/SprintWell |
 | **Despliegue** | _Local (ver [Instalación y ejecución](#-instalación-y-ejecución)). Sin despliegue público por ahora._ |
 | **Slides** | **[Presentación (Google Drive)](https://drive.google.com/file/d/1KOJx-FMoyxw9CXwl0tP-0jR2mtXZzWtO/view)** · en el repo: [`docs/defense/slides-v2.pdf`](docs/defense/slides-v2.pdf) · fuente [`slides-v2.md`](docs/defense/slides-v2.md) (Marp) · guion [`presentation.md`](docs/defense/presentation.md) |
-| **Vídeo** | _Pendiente de grabar (guion detallado toma por toma en [`docs/defense/video-script-v2.md`](docs/defense/video-script-v2.md))_ |
+| **Vídeo** | **[Explicación del proyecto (Google Drive)](https://drive.google.com/file/d/1Bi7dNQCs_Vafsg0hoOGjhLexr1gZER9c/view)** · guion en [`docs/defense/video-script-v2.md`](docs/defense/video-script-v2.md) |
 
-> Los tres últimos son entregables que requieren un paso manual (desplegar, exportar las slides, grabar el vídeo). Este README se actualiza con sus URLs públicas cuando existan.
+> Slides y vídeo están publicados con URL pública. El despliegue es local (stack completo en contenedores, ver [Instalación y ejecución](#-instalación-y-ejecución)); no hay URL pública de despliegue por ahora.
 
 ---
 
